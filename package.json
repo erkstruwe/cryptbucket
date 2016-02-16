@@ -4,16 +4,21 @@
   "description": "End-to-end file hosting",
   "author": "Erk Struwe, Bremen, Germany (estruwe@estruwe.de)",
   "license": "UNLICENSED",
-  "main": "app.js",
+  "main": "app/app.js",
+  "engines": {
+	"node": "5.6.0"
+  },
   "repository": {
 	"type": "git",
 	"url": "git+https://github.com/erkstruwe/cryptbucket.git"
   },
   "scripts": {
-	"start": "npm run clean && npm run lint && npm run build && node app.js",
+	"test": "npm run lint & npm run build && npm run test:js",
+	"test:js": "jasmine JASMINE_CONFIG_PATH=tests/jasmine.json",
+	"start": "npm clean && npm test && node app/app.js",
 	"clean": "rimraf .tmp/*",
 	"lint": "npm run lint:js",
-	"lint:js": "jshint app.js config app src/js",
+	"lint:js": "jshint app config tests src/js",
 	"build": "npm run build:static & npm run build:css",
 	"build:static": "copyfiles --up 2 src/static/**/* .tmp/public/",
 	"build:css": "node-sass --include-path node_modules --output-style compressed --source-map true src/scss/main.scss .tmp/public/styles.css"
@@ -26,6 +31,7 @@
 	"express": "~4.13.1",
 	"helmet": "~1.1.0",
 	"jade": "~1.11.0",
+	"jasmine": "~2.4.1",
 	"jshint": "~2.9.1",
 	"node-sass": "~3.4.2",
 	"st": "~1.1.0"
