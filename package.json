@@ -15,7 +15,7 @@
   "scripts": {
 	"test": "npm run lint & npm run build && npm run test:js",
 	"test:js": "jasmine JASMINE_CONFIG_PATH=tests/jasmine.json",
-	"start": "npm clean && npm test && node app/app.js",
+	"start": "npm run clean && npm test && node app/app.js",
 	"clean": "rimraf .tmp/*",
 	"lint": "npm run lint:js",
 	"lint:js": "jshint app config tests src/js",
