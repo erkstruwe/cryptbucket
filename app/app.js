@@ -19,7 +19,7 @@ module.exports = function (cb) {
 	app.set('strict routing', true);
 	app.set('x-powered-by', false);
 //app.set('trust proxy', 1);
-	app.set('views', lib.path.join(__dirname, 'app/views'));
+	app.set('views', lib.path.join(__dirname, 'views'));
 	app.set('view engine', 'jade');
 
 // dependencies
@@ -47,7 +47,7 @@ module.exports = function (cb) {
 	});
 
 	app.use(lib.st({
-		path: lib.path.join(__dirname, '.tmp/public'),
+		path: lib.path.join(__dirname, '../.tmp/public'),
 		url: 'static',
 		index: false,
 		gzip: false, // compression is already used
@@ -90,3 +90,8 @@ module.exports = function (cb) {
 
 	return app;
 };
+
+// start server if run from node command line
+if (require.main === module)
+	module.exports(function () {
+	});
