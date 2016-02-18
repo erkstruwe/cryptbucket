@@ -47,7 +47,7 @@ module.exports = function (cb) {
 	});
 
 	app.use(lib.st({
-		path: lib.path.join(__dirname, '../.tmp/public'),
+    path: lib.path.join(__dirname, '../.tmp'),
 		url: 'static',
 		index: false,
 		gzip: false, // compression is already used
