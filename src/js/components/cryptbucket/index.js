@@ -1,3 +1,4 @@
+require('fastclick')(document.body);
 window.jQuery = require('jquery');
 //require('bootstrap/dist/js/umd/alert.js');
 var angular = require('angular');
