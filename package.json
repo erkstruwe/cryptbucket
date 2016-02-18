@@ -2,20 +2,25 @@
   "name": "cryptbucket",
   "version": "0.0.1",
   "description": "End-to-end encrypted file hosting",
-  "author": "Erk Struwe, Bremen, Germany (estruwe@estruwe.de)",
+  "author": "Erk Struwe <estruwe@estruwe.de> (http://1336.de/erk-struwe/)",
   "license": "UNLICENSED",
+  "private": true,
   "main": "app/app.js",
+  "bugs": {
+    "url": "https://github.com/erkstruwe/cryptbucket/issues"
+  },
+  "homepage": "http://cryptbucket.com/",
   "engines": {
     "node": "5.6.0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/erkstruwe/cryptbucket.git"
+    "url": "https://github.com/erkstruwe/cryptbucket.git"
   },
   "scripts": {
     "test": "npm-run-all --parallel lint test:js",
     "test:js": "jasmine JASMINE_CONFIG_PATH=tests/jasmine.json",
-    "start": "npm run clean && npm test && npm run build && node app/app.js",
+    "start": "npm run clean && npm run build && node app/app.js",
     "clean": "rimraf .tmp/*",
     "lint": "npm run lint:js",
     "lint:js": "jshint app config tests src/js",
@@ -38,8 +43,8 @@
     "express": "~4.13.1",
     "helmet": "~1.1.0",
     "jade": "~1.11.0",
-    "jasmine": "~2.4.1",
-    "jshint": "~2.9.1",
+    "jquery": "^2.2.0",
+    "jquery-browserify": "^1.8.1",
     "ng-file-upload": "~12.0.1",
     "node-sass": "~3.4.2",
     "npm-run-all": "~1.5.1",
@@ -47,6 +52,8 @@
     "st": "~1.1.0"
   },
   "devDependencies": {
+    "jasmine": "~2.4.1",
+    "jshint": "~2.9.1",
     "nodemon": "~1.8.1",
     "watchify": "~3.7.0"
   },
