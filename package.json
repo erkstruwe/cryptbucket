@@ -26,12 +26,13 @@
     "lint:js": "jshint app config tests src/js",
     "build": "npm-run-all --parallel build:static build:js build:css",
     "build:static": "copyfiles --up 2 src/static/**/* .tmp/",
-    "build:js": "browserify src/js/components/app/index.js | uglifyjs --compress --mangle --output .tmp/app.js",
+    "build:js": "browserify src/js/components/cryptbucket/index.js | uglifyjs --compress --mangle --output .tmp/app.js",
     "build:css": "node-sass --include-path node_modules --output-style compressed src/scss/main.scss .tmp/styles.css",
-    "watch": "npm run clean && npm run build:static && npm-run-all --parallel watch:app watch:js watch:css",
+    "watch": "npm run clean && npm run build:static && npm-run-all --parallel watch:app watch:js watch:css livereload",
     "watch:app": "nodemon --watch app --watch config",
-    "watch:js": "watchify src/js/components/app/index.js --debug --verbose -o .tmp/app.js",
-    "watch:css": "node-sass --include-path node_modules --source-map-embed src/scss/main.scss .tmp/styles.css"
+    "watch:js": "watchify src/js/components/cryptbucket/index.js --debug --verbose -o .tmp/app.js",
+    "watch:css": "nodemon -e scss -x \"npm run build:css -- --source-map-embed --output-style nested\"",
+    "livereload": "livereload ."
   },
   "dependencies": {
     "angular": "~1.5.0",
@@ -54,6 +55,7 @@
   "devDependencies": {
     "jasmine": "~2.4.1",
     "jshint": "~2.9.1",
+    "livereload": "^0.4.1",
     "nodemon": "~1.8.1",
     "watchify": "~3.7.0"
   },

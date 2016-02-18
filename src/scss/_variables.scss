@@ -1,0 +1,34 @@
+/* http://paletton.com/#uid=72b0E0ktGqejHwuoPtIvMliEfgd */
+$gray-dark: #373a3c;
+$gray: #55595c;
+$gray-light: #818a91;
+$gray-lighter: #eceeef;
+$gray-lightest: #f7f7f9;
+$brand-primary: #006700;
+$brand-success: #006700;
+$brand-info: #930b7e;
+$brand-warning: #930b7e;
+$brand-danger: #aa0101;
+
+$enable-flex: false;
+$enable-rounded: true;
+$enable-shadows: false;
+$enable-gradients: false;
+$enable-transitions: false;
+$enable-hover-media-query: false;
+$enable-grid-classes: true;
+
+$body-bg: $gray-lightest;
+$body-color: $gray-dark;
+
+$link-color: $brand-primary;
+$link-decoration: none;
+$link-hover-color: darken($link-color, 15%);
+$link-hover-decoration: underline;
+
+$font-family-sans-serif: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-family-serif: Georgia, "Times New Roman", Times, serif;
+$font-family-monospace: Menlo, Monaco, Consolas, "Courier New", monospace;
+$font-family-base: $font-family-sans-serif;
+
+$font-size-root: 16px;

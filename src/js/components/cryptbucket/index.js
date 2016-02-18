@@ -9,4 +9,3 @@ var app = angular.module('cryptbucket', []);
 app.run(function () {
   console.log('Hello world');
 });
-

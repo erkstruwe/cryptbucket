@@ -8,6 +8,7 @@ module.exports = function (cb) {
 	lib.dotenv = require('dotenv');
 	lib.dotenv.load();
 	app.locals.config = require('../config/env/' + app.get('env') + '.js')(app);
+	app.locals.config.environment = app.get('env');
 
 // node modules
 	lib.fs = require('fs');
@@ -47,7 +48,7 @@ module.exports = function (cb) {
 	});
 
 	app.use(lib.st({
-    path: lib.path.join(__dirname, '../.tmp'),
+		path: lib.path.join(__dirname, '../.tmp'),
 		url: 'static',
 		index: false,
 		gzip: false, // compression is already used
