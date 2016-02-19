@@ -29,11 +29,11 @@
     "build:html": "jade --out .tmp src/js",
     "build:js": "browserify src/js/cryptbucket/cryptbucket.js | uglifyjs --compress --mangle --output .tmp/app.js",
     "build:css": "node-sass --include-path node_modules --output-style compressed src/scss/main.scss .tmp/styles.css",
-    "watch": "npm run clean && npm run build:static && npm-run-all --parallel watch:app watch:html watch:js watch:css livereload",
-    "watch:app": "nodemon --watch app --watch config --watch .tmp",
+    "watch": "npm run clean && npm run build:static && npm-run-all --parallel watch:html watch:js watch:css watch:app",
     "watch:html": "npm run build:html -- --watch",
     "watch:js": "watchify src/js/cryptbucket/cryptbucket.js --debug --verbose -o .tmp/app.js",
-    "watch:css": "nodemon -e scss -x 'npm run build:css -- --source-map-embed --output-style nested'",
+    "watch:css": "nodemon -e scss -x \"npm run build:css -- --source-map-embed --output-style nested\"",
+    "watch:app": "nodemon --watch app --watch config --watch .tmp -e html -e css",
     "livereload": "livereload ."
   },
   "dependencies": {
