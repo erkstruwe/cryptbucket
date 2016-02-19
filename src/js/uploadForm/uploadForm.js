@@ -26,30 +26,46 @@ angular
 
 						console.log('unencrypted', buffer);
 
-						triplesec.encrypt({key: new Buffer('erk'), data: new Buffer(buffer)}, function (e, encrypted) {
-							if (e)
-								return console.error(e);
+						//triplesec.encrypt({key: new Buffer('erk'), data: new Buffer(buffer)}, function (e, encrypted) {
+						//	if (e)
+						//		return console.error(e);
+						//
+						//	console.log('triplesec encrypted', encrypted);
+						//
+						//	return triplesec.decrypt({key: new Buffer('erk'), data: encrypted}, function (e, decrypted) {
+						//		if (e)
+						//			return console.error(e);
+						//		return console.log('triplesec decrypted', decrypted);
+						//	});
+						//});
 
-							console.log('triplesec encrypted', encrypted);
+						//var encrypted = Buffer.concat([cipher.update(buffer), cipher.final()]);
+						//console.log('crypto buffer encrypted', encrypted, cipher.getAuthTag());
 
-							return triplesec.decrypt({key: new Buffer('erk'), data: encrypted}, function (e, decrypted) {
-								if (e)
-									return console.error(e);
-								return console.log('triplesec decrypted', decrypted);
-							});
-						});
-
-						var encrypted = Buffer.concat([cipher.update(buffer), cipher.final()]);
-						console.log('crypto buffer encrypted', encrypted, cipher.getAuthTag());
-
+						// cipherStream output
 						var output = new Buffer('');
 						cipherStream.on('data', function (chunk) {
-							output = Buffer.concat([output, chunk]);
+							//output = Buffer.concat([output, chunk]);
 						});
-						cipherStream.on('end', function () {
+						cipherStream.on('finish', function () {
 							console.log('crypto stream encrypted', output);
 						});
-						cipherStream.end(buffer);
+
+						// bufferStream
+						var offset = 0;
+						var chunkSize = 4096;
+						var bufferStream = highland(function (push, next) {
+							if (offset < buffer.length) {
+								//console.log('sending slice');
+								push(null, buffer.slice(offset, offset + chunkSize - 1));
+								offset += chunkSize;
+								setTimeout(next);
+							} else {
+								console.log('sending nil');
+								push(null, highland.nil);
+							}
+						});
+						bufferStream.pipe(cipherStream);
 					});
 				};
 			}
