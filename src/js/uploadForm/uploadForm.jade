@@ -1,3 +1,4 @@
-button.btn.btn-default(ngf-select='', ngf-drop='', ngf-change='selectFile($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)', ng-model='file') Select or drop file here
-pre {{file.name}}
+button.btn.btn-default(ngf-select='', ngf-drop='', ng-model='files', ngf-model-invalid="invalidFiles", ngf-multiple="true", ngf-keep="'distinct'", ngf-max-files="1", ngf-change='selectFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)', ngf-max-size='{{validation.size.max}}', ngf-max-total-size='{{validation.size.maxTotal}}', ngf-validate-async-fn='validate($files)') Select or drop file here
+pre {{files}}
+pre {{invalidFiles}}
 button.btn.btn-primary(type='submit', ng-click='upload()') Encrypt to console

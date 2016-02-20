@@ -14,16 +14,25 @@ angular
 		return {
 			templateUrl: CONFIG.baseUrlStatic + '/uploadForm.html',
 			link: function (scope, element, attrs) {
-				scope.file = null;
+				scope.files = [];
+				scope.invalidFiles = [];
 				scope.password = 'secret';
+				scope.validation = CONFIG.uploadForm.validation;
 
-				scope.selectFile = function ($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event) {
+				scope.selectFiles = function ($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event) {
 					console.log($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event);
+				};
+
+				scope.validate = function ($files) {
+					return new Promise(function (resolve, reject) {
+						// TODO check MD5 for copyrighted or illegal content
+						return resolve(true);
+					});
 				};
 
 				scope.upload = function () {
 					// setup
-					var fileStream = FileStreamService.readStream(scope.file);
+					var fileStream = FileStreamService.readStream(scope.files[0]);
 					var compressionStream = CompressionService.transformStream({});
 					var cipherStream = EncryptionService.transformStream(scope.password);
 					console.log('password', scope.password, ', iv', cipherStream.iv.toString('base64'));

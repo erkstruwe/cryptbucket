@@ -9,11 +9,15 @@ module.exports = function (app) {
 	var frontend = app.locals.lib.lodash.pick(backend, 'baseUrl baseUrlStatic'.split(' '));
 	app.locals.lib.lodash.merge(frontend, {
 		fileStream: {
-			chunkSize: 10 * 1024 // 10 kib
+			chunkSize: 16 * 1024 // 16 kib
 		},
 		uploadForm: {
-			maxSize: 100 * 1024 * 1024, // 100 Mib
-			maxTotalSize: 100 * 1024 * 1024 // 100 Mib
+			validation: {
+				size: {
+					max: 100 * 1024 * 1024, // 100 Mib
+					maxTotal: 100 * 1024 * 1024 // 100 Mib
+				}
+			},
 		}
 	});
 
