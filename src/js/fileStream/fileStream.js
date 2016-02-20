@@ -13,7 +13,7 @@ angular
 			readStream: function (file) {
 				// setup
 				var offset = 0;
-				var chunkSize = 10000;
+				var chunkSize = config.fileStream.chunkSize;
 
 				console.log(file);
 

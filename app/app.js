@@ -6,9 +6,11 @@ module.exports = function (cb) {
 // config
 	lib.path = require('path');
 	lib.dotenv = require('dotenv');
+	lib.lodash = require('lodash');
 	lib.dotenv.load();
-	app.locals.config = require('../config/env/' + app.get('env') + '.js')(app);
-	app.locals.config.environment = app.get('env');
+	var configObject = require('../config/env/' + app.get('env') + '.js')(app);
+	app.locals.config = configObject.backend;
+	app.locals.configFrontend = configObject.frontend;
 
 // node modules
 	lib.fs = require('fs');
