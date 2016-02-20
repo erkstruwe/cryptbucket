@@ -18,8 +18,13 @@ angular
 				scope.invalidFiles = [];
 				scope.password = 'secret';
 				scope.validation = CONFIG.uploadForm.validation;
+				scope.status = {
+					progress: 0,
+					messages: []
+				};
 
 				scope.selectFiles = function ($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event) {
+					scope.status.messages.push({text: 'Selected file ' + $file.name + ', ' + $file.size + ' bytes'});
 					console.log($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event);
 				};
 
@@ -30,16 +35,20 @@ angular
 					});
 				};
 
-				scope.upload = function () {
+				scope.process = function () {
 					// setup
-					var fileStream = FileStreamService.readStream(scope.files[0]);
+					var fileStream = FileStreamService.readStream(scope.files[0], function (val) {
+						scope.status.progress = val;
+						scope.$apply();
+					});
 					var compressionStream = CompressionService.transformStream({});
 					var cipherStream = EncryptionService.transformStream(scope.password);
-					console.log('password', scope.password, ', iv', cipherStream.iv.toString('base64'));
+
+					scope.status.messages.push({text: 'password: ' + scope.password + ', iv: ' + cipherStream.iv.toString('base64')});
 
 					// start pipeline
-					fileStream.through(compressionStream).through(cipherStream.stream).toArray(function (array) {
-						return console.log(array);
+					return fileStream.through(compressionStream).through(cipherStream.stream).toArray(function (array) {
+						return scope.status.messages.push({text: 'done'});
 					});
 				};
 			}

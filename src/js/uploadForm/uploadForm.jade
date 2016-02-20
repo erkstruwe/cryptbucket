@@ -1,4 +1,9 @@
 button.btn.btn-default(ngf-select='', ngf-drop='', ng-model='files', ngf-model-invalid="invalidFiles", ngf-multiple="true", ngf-keep="'distinct'", ngf-max-files="1", ngf-change='selectFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)', ngf-max-size='{{validation.size.max}}', ngf-max-total-size='{{validation.size.maxTotal}}', ngf-validate-async-fn='validate($files)') Select or drop file here
 pre {{files}}
 pre {{invalidFiles}}
-button.btn.btn-primary(type='submit', ng-click='upload()') Encrypt to console
+button.btn.btn-primary(type='submit', ng-click='process()') Encrypt to console
+p
+	samp(ng-bind="'Progress: ' + (status.progress * 100 | number: 0) + ' %'")
+	br
+	samp(ng-repeat-start='message in status.messages', ng-bind='message.text')
+	br(ng-repeat-end)
