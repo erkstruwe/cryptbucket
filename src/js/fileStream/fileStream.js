@@ -7,13 +7,13 @@ var highland = require('highland');
 // components
 
 angular
-	.module('fileStream', [])
-	.service('FileStreamService', [function () {
+	.module('fileStream', ['config'])
+	.service('FileStreamService', ['CONFIG', function (CONFIG) {
 		return {
 			readStream: function (file) {
 				// setup
 				var offset = 0;
-				var chunkSize = config.fileStream.chunkSize;
+				var chunkSize = CONFIG.fileStream.chunkSize;
 
 				console.log(file);
 

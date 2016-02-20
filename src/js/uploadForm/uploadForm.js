@@ -9,10 +9,10 @@ require('../compression/compression.js');
 require('../encryption/encryption.js');
 
 angular
-	.module('uploadForm', ['ngFileUpload', 'fileStream', 'compression', 'encryption'])
-	.directive('uploadForm', ['Upload', 'FileStreamService', 'CompressionService', 'EncryptionService', function (Upload, FileStreamService, CompressionService, EncryptionService) {
+	.module('uploadForm', ['ngFileUpload', 'config', 'fileStream', 'compression', 'encryption'])
+	.directive('uploadForm', ['Upload', 'CONFIG', 'FileStreamService', 'CompressionService', 'EncryptionService', function (Upload, CONFIG, FileStreamService, CompressionService, EncryptionService) {
 		return {
-			templateUrl: config.baseUrlStatic + '/uploadForm.html',
+			templateUrl: CONFIG.baseUrlStatic + '/uploadForm.html',
 			link: function (scope, element, attrs) {
 				scope.file = null;
 				scope.password = 'secret';

@@ -10,6 +10,10 @@ module.exports = function (app) {
 	app.locals.lib.lodash.merge(frontend, {
 		fileStream: {
 			chunkSize: 10 * 1024 // 10 kib
+		},
+		uploadForm: {
+			maxSize: 100 * 1024, // 100 kib
+			maxTotalSize: 100 * 1024 // 100 kib
 		}
 	});
 
