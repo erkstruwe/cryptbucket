@@ -7,22 +7,32 @@ var crypto = require('crypto');
 // components
 
 angular
-	.module('encryption', [])
-	.service('EncryptionService', [function () {
-		return {
-			transformStream: function (password) {
-				// hash password with sha256 and truncate to get length of 32, this has no security implications
-				var hash = crypto.createHash('sha256');
-				hash.update(password);
-				var passwordHash = hash.digest().slice(0, 32);
+	.module('encryption', ['config'])
+	.service('EncryptionService', ['CONFIG', function (CONFIG) {
+		var pbkdf2 = function (password, salt, keylen, cb) {
+			return crypto.pbkdf2(password, salt, CONFIG.encryption.pbkdf2.iterations, keylen, CONFIG.encryption.pbkdf2.digest, cb);
+		};
 
-				// pseudo-random iv that will be publicly saved at cryptbucket
-				var iv = crypto.randomBytes(16);
+		var randomBytes = crypto.randomBytes;
 
-				return {
-					stream: crypto.createCipheriv('aes-256-ctr', passwordHash, iv),
+		var cipherStream = function (password, cb) {
+			var salt = crypto.randomBytes(256);
+			var iv = crypto.randomBytes(16);
+			return pbkdf2(password, salt, 32, function (e, key) {
+				if (e)
+					return cb(e);
+
+				return cb(null, {
+					stream: crypto.createCipheriv('aes-256-ctr', key, iv),
+					salt: salt,
 					iv: iv
-				};
-			}
+				});
+			});
+		};
+
+		return {
+			pbkdf2: pbkdf2,
+			randomBytes: randomBytes,
+			cipherStream: cipherStream
 		};
 	}]);

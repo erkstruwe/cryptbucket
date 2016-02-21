@@ -3,21 +3,28 @@ module.exports = function (app) {
 		environment: app.get('env'),
 		port: process.env.PORT,
 		baseUrl: '//cryptbucket.com',
-		baseUrlStatic: '//cryptbucket.com/static'
+		baseUrlStatic: '//cryptbucket.com/static',
+		validation: {
+			size: {
+				max: 100 * 1024, // 100 kiB
+				maxTotal: 100 * 1024 // 100 kiB
+			}
+		}
 	};
 
 	var frontend = app.locals.lib.lodash.pick(backend, 'baseUrl baseUrlStatic'.split(' '));
 	app.locals.lib.lodash.merge(frontend, {
 		fileStream: {
-			chunkSize: 16 * 1024 // 16 kib
+			chunkSize: 16 * 1024 // 16 kiB
 		},
 		uploadForm: {
-			validation: {
-				size: {
-					max: 100 * 1024, // 100 kib
-					maxTotal: 100 * 1024 // 100 kib
-				}
-			},
+			validation: backend.validation
+		},
+		encryption: {
+			pbkdf2: {
+				iterations: 10000,
+				digest: 'sha256'
+			}
 		}
 	});
 

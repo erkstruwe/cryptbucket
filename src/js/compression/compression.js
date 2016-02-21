@@ -9,7 +9,7 @@ angular
 	.module('compression', [])
 	.service('CompressionService', [function () {
 		return {
-			transformStream: function (opts) {
+			gzipStream: function (opts) {
 				return zlib.createGzip(opts);
 			}
 		};

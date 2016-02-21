@@ -3,7 +3,13 @@ module.exports = function (app) {
 		environment: app.get('env'),
 		port: process.env.PORT,
 		baseUrl: '//localhost:1336',
-		baseUrlStatic: '//static.localhost:1336'
+		baseUrlStatic: '//static.localhost:1336',
+		validation: {
+			size: {
+				max: 100 * 1024 * 1024, // 100 MiB
+				maxTotal: 100 * 1024 * 1024 // 100 MiB
+			}
+		}
 	};
 
 	var frontend = app.locals.lib.lodash.pick(backend, 'baseUrl baseUrlStatic'.split(' '));
@@ -12,12 +18,13 @@ module.exports = function (app) {
 			chunkSize: 16 * 1024 // 16 kib
 		},
 		uploadForm: {
-			validation: {
-				size: {
-					max: 100 * 1024 * 1024, // 100 Mib
-					maxTotal: 100 * 1024 * 1024 // 100 Mib
-				}
-			},
+			validation: backend.validation
+		},
+		encryption: {
+			pbkdf2: {
+				iterations: 10000,
+				digest: 'sha256'
+			}
 		}
 	});
 

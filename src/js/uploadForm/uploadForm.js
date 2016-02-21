@@ -4,19 +4,20 @@
 require('ng-file-upload');
 
 // components
+require('../async/async.js');
 require('../fileStream/fileStream.js');
 require('../compression/compression.js');
 require('../encryption/encryption.js');
 
 angular
-	.module('uploadForm', ['ngFileUpload', 'config', 'fileStream', 'compression', 'encryption'])
-	.directive('uploadForm', ['Upload', 'CONFIG', 'FileStreamService', 'CompressionService', 'EncryptionService', function (Upload, CONFIG, FileStreamService, CompressionService, EncryptionService) {
+	.module('uploadForm', ['ngFileUpload', 'config', 'async', 'fileStream', 'compression', 'encryption'])
+	.directive('uploadForm', ['Upload', 'CONFIG', 'async', 'FileStreamService', 'CompressionService', 'EncryptionService', function (Upload, CONFIG, async, FileStreamService, CompressionService, EncryptionService) {
 		return {
 			templateUrl: CONFIG.baseUrlStatic + '/uploadForm.html',
 			link: function (scope, element, attrs) {
 				scope.files = [];
 				scope.invalidFiles = [];
-				scope.password = 'secret';
+				scope.password = '';
 				scope.validation = CONFIG.uploadForm.validation;
 				scope.status = {
 					progress: 0,
@@ -36,18 +37,40 @@ angular
 				};
 
 				scope.process = function () {
-					// setup
 					var fileStream = FileStreamService.readStream(scope.files[0], function (val) {
 						scope.status.progress = val;
 						scope.$apply();
 					});
-					var compressionStream = CompressionService.transformStream({});
-					var cipherStream = EncryptionService.transformStream(scope.password);
 
-					scope.status.messages.push({text: 'password: ' + scope.password + ', iv: ' + cipherStream.iv.toString('base64')});
+					var compressionStream = CompressionService.gzipStream({});
 
-					// start pipeline
-					return fileStream.through(compressionStream).through(cipherStream.stream).toArray(function (array) {
+					return async.auto({
+						cipherStream: function (cb) {
+							return EncryptionService.cipherStream(scope.password, cb);
+						},
+						challenge: function (cb) {
+							return cb(null, EncryptionService.randomBytes(256));
+						},
+						challengeResult: ['challenge', function (cb, r) {
+							return EncryptionService.pbkdf2(scope.password, r.challenge, 32, cb);
+						}],
+						uploadPermission: ['cipherStream', 'challenge', 'challengeResult', function (cb, r) {
+							console.log(r);
+							scope.status.messages.push({text: 'password: not shown'});
+							scope.status.messages.push({text: 'salt: ' + r.cipherStream.salt.toString('base64')});
+							scope.status.messages.push({text: 'iv: ' + r.cipherStream.iv.toString('base64')});
+							scope.status.messages.push({text: 'challenge: ' + r.challenge.toString('base64')});
+							scope.status.messages.push({text: 'challengeResult: ' + r.challengeResult.toString('base64')});
+							return cb();
+						}],
+						pipeline: ['cipherStream', 'uploadPermission', function (cb, r) {
+							return fileStream.through(compressionStream).through(r.cipherStream.stream).done(cb);
+						}]
+					}, function (e, r) {
+						if (e)
+							return console.error(e);
+
+						console.log(r);
 						return scope.status.messages.push({text: 'done'});
 					});
 				};

@@ -13,7 +13,7 @@ angular
 		return {
 			readStream: function (file, progress) {
 				// setup
-				var throttledProgress = lodash.throttle(progress, 1000);
+				var throttledProgress = lodash.throttle(progress, 250);
 				var offset = 0;
 				var chunkSize = CONFIG.fileStream.chunkSize;
 
@@ -28,7 +28,6 @@ angular
 							next();
 						});
 					} else {
-						console.log('sending nil');
 						push(null, highland.nil);
 					}
 				});

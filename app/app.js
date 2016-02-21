@@ -29,6 +29,7 @@ module.exports = function (cb) {
 	lib.compression = require('compression');
 	lib.helmet = require('helmet');
 	lib.st = require('st');
+	lib.async = require('async');
 
 // middleware
 	app.use(lib.compression({}));
