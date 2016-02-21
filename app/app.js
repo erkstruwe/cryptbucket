@@ -170,17 +170,7 @@ module.exports = function (cb) {
 					logging: function (msg) {
 						return lib.logger.log(app.locals.config.db.logLevel, msg);
 					}
-				}).nodeify(function (e, r) {
-					if (e) {
-						if (e.name == 'SequelizeConnectionRefusedError') {
-							console.error('ignoring error', e);
-						} else {
-							cb(e);
-						}
-					}
-
-					return cb(null, r);
-				});
+				}).nodeify(cb);
 			return cb();
 		},
 		bootstrap: ['syncDb', function (cb, r) {

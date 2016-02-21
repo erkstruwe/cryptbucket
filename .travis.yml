@@ -4,4 +4,4 @@ node_js:
 services:
   - mysql
 before_script:
-  - mysql -e 'create database cryptbucket-test'
+  - mysql -e 'create database `cryptbucket-test`'
