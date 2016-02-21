@@ -1,8 +1,8 @@
 module.exports = {
 	create: function (req, res, next) {
-		var opts = req.app.locals.lib.lodash.pick(req.body, ['salt', 'iv', 'challenge', 'challengeResult']);
+		var opts = req.app.locals.lib.lodash.pick(req.body, ['salt', 'iv', 'challenge', 'challengeResult', 'files']);
 
-		return req.app.locals.models.Upload.create(opts).nodeify(res.negotiate);
+		return req.app.locals.models.Upload.create(opts, {include: [req.app.locals.models.File]}).nodeify(res.negotiate);
 	},
 
 	uploaded: function (req, res, next) {

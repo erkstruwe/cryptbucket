@@ -15,7 +15,17 @@ module.exports = function (app) {
 				allowNull: false,
 				defaultValue: 'created'
 			},
-			url: {
+			bucket: {
+				type: sequelize.STRING(32),
+				allowNull: false,
+				defaultValue: app.locals.config.s3.defaultBucket
+			},
+			folder: {
+				type: sequelize.STRING(32),
+				allowNull: false,
+				defaultValue: app.locals.config.s3.defaultFolder
+			},
+			filename: {
 				type: sequelize.UUID,
 				allowNull: false,
 				defaultValue: sequelize.UUIDV4
@@ -40,7 +50,7 @@ module.exports = function (app) {
 		{
 			paranoid: true,
 			indexes: [
-				{unique: true, fields: ['url']}
+				{unique: true, fields: ['filename']}
 			],
 			instanceMethods: {
 				toJSON: function () {

@@ -5,13 +5,14 @@ require('ng-file-upload');
 
 // components
 require('../async/async.js');
+require('../lodash/lodash.js');
 require('../fileStream/fileStream.js');
 require('../compression/compression.js');
 require('../encryption/encryption.js');
 
 angular
-	.module('uploadForm', ['ngFileUpload', 'config', 'async', 'fileStream', 'compression', 'encryption'])
-	.directive('uploadForm', ['Upload', 'CONFIG', 'async', 'FileStreamService', 'CompressionService', 'EncryptionService', '$http', function (Upload, CONFIG, async, FileStreamService, CompressionService, EncryptionService, $http) {
+	.module('uploadForm', ['ngFileUpload', 'config', 'async', 'lodash', 'fileStream', 'compression', 'encryption'])
+	.directive('uploadForm', ['Upload', 'CONFIG', 'async', 'lodash', 'FileStreamService', 'CompressionService', 'EncryptionService', '$http', function (Upload, CONFIG, async, lodash, FileStreamService, CompressionService, EncryptionService, $http) {
 		return {
 			templateUrl: CONFIG.baseUrlStatic + '/uploadForm.html',
 			link: function (scope, element, attrs) {
@@ -74,7 +75,15 @@ angular
 									salt: r.cipherStream.salt.toString('binary'),
 									iv: r.cipherStream.iv.toString('binary'),
 									challenge: r.challenge.toString('binary'),
-									challengeResult: r.challengeResult.toString('binary')
+									challengeResult: r.challengeResult.toString('binary'),
+									files: lodash.chain(scope.files)
+										.map(function (file) {
+											return {
+												size: file.size,
+												type: file.type || null
+											};
+										})
+										.value()
 								}
 							})
 								.then(function (response) {

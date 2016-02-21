@@ -3,13 +3,16 @@ module.exports = function (app) {
 	var models = app.locals.models;
 	var sequelize = lib.sequelize;
 
-	//models.Article.belongsTo(models.User, {
-	//});
-	//
-	//models.User.belongsToMany(models.Product, {
-	//	through: 'UserProductFavorite'
-	//});
-	//models.Product.belongsToMany(models.User, {
-	//	through: 'UserProductFavorite'
-	//});
+	models.Upload.hasMany(models.File, {
+		foreignKey: {
+			allowNull: false
+		}
+	});
+	models.File.belongsTo(models.Upload, {
+		foreignKey: {
+			allowNull: false
+		},
+		onUpdate: 'CASCADE',
+		onDelete: 'RESTRICT'
+	});
 };

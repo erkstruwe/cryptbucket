@@ -75,6 +75,7 @@ module.exports = function (cb) {
 			app.locals.models[file.replace(/\.js$/i, '')] = require(__dirname + '/models/' + file)(app);
 		})
 		.value();
+	require(__dirname + '/models/relations.js')(app);
 
 	// controllers
 	app.locals.controllers = {};

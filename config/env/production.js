@@ -14,6 +14,12 @@ module.exports = function (app) {
 			forceSync: false, // Attention! This will drop all tables if true!
 			logLevel: 'verbose'
 		},
+		s3: {
+			defaultBucket: 'cryptbucket-dev',
+			defaultFolder: 'standard',
+			accessKeyId: process.env.S3_ACCESS_KEY_ID,
+			secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
+		},
 		validation: {
 			size: {
 				max: 100 * 1024, // 100 kiB
