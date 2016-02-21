@@ -33,13 +33,14 @@
     "watch:html": "npm run build:html -- --watch",
     "watch:js": "watchify src/js/cryptbucket/cryptbucket.js --debug --verbose -o .tmp/app.js",
     "watch:css": "nodemon -e scss -x \"npm run build:css -- --source-map-embed --output-style nested\"",
-    "watch:app": "nodemon --watch app --watch config --watch .tmp -e html -e css",
+    "watch:app": "nodemon --watch app --watch config --watch .tmp -e html -e css -e js",
     "livereload": "livereload ."
   },
   "dependencies": {
     "angular": "~1.5.0",
     "async": "~1.5.2",
     "blob-to-buffer": "~1.2.6",
+    "body-parser": "~1.15.0",
     "bootstrap": "~4.0.0-alpha.2",
     "browserify": "~13.0.0",
     "compression": "~1.6.1",
@@ -53,12 +54,15 @@
     "jade": "~1.11.0",
     "jquery": "~2.2.0",
     "lodash": "~4.5.0",
+    "mysql": "~2.10.2",
     "ng-file-upload": "~12.0.1",
     "node-sass": "~3.4.2",
     "npm-run-all": "~1.5.1",
     "rimraf": "~2.5.2",
+    "sequelize": "~3.19.3",
     "st": "~1.1.0",
-    "triplesec": "~3.0.25"
+    "triplesec": "~3.0.25",
+    "winston": "~2.1.1"
   },
   "devDependencies": {
     "jasmine": "~2.4.1",

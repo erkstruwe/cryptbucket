@@ -11,7 +11,7 @@ require('../encryption/encryption.js');
 
 angular
 	.module('uploadForm', ['ngFileUpload', 'config', 'async', 'fileStream', 'compression', 'encryption'])
-	.directive('uploadForm', ['Upload', 'CONFIG', 'async', 'FileStreamService', 'CompressionService', 'EncryptionService', function (Upload, CONFIG, async, FileStreamService, CompressionService, EncryptionService) {
+	.directive('uploadForm', ['Upload', 'CONFIG', 'async', 'FileStreamService', 'CompressionService', 'EncryptionService', '$http', function (Upload, CONFIG, async, FileStreamService, CompressionService, EncryptionService, $http) {
 		return {
 			templateUrl: CONFIG.baseUrlStatic + '/uploadForm.html',
 			link: function (scope, element, attrs) {
@@ -54,10 +54,10 @@ angular
 							return EncryptionService.cipherStream(scope.password, cb);
 						},
 						challenge: function (cb) {
-							return cb(null, EncryptionService.randomBytes(256));
+							return cb(null, EncryptionService.randomBytes(255));
 						},
 						challengeResult: ['challenge', function (cb, r) {
-							return EncryptionService.pbkdf2(scope.password, r.challenge, 32, cb);
+							return EncryptionService.pbkdf2(scope.password, r.challenge, 255, cb);
 						}],
 						uploadPermission: ['cipherStream', 'challenge', 'challengeResult', function (cb, r) {
 							console.log(r);
@@ -66,10 +66,46 @@ angular
 							scope.status.messages.push({text: 'iv: ' + r.cipherStream.iv.toString('base64')});
 							scope.status.messages.push({text: 'challenge: ' + r.challenge.toString('base64')});
 							scope.status.messages.push({text: 'challengeResult: ' + r.challengeResult.toString('base64')});
-							return cb();
+
+							return $http({
+								method: 'POST',
+								url: CONFIG.baseUrl + '/api/upload/',
+								data: {
+									salt: r.cipherStream.salt.toString('binary'),
+									iv: r.cipherStream.iv.toString('binary'),
+									challenge: r.challenge.toString('binary'),
+									challengeResult: r.challengeResult.toString('binary')
+								}
+							})
+								.then(function (response) {
+									console.log(response);
+									return cb(null, response.data);
+								})
+								.catch(function (e) {
+									console.error(e);
+									return cb(e);
+								});
 						}],
 						pipeline: ['cipherStream', 'uploadPermission', function (cb, r) {
 							return fileStream.through(compressionStream).through(r.cipherStream.stream).done(cb);
+						}],
+						uploaded: ['uploadPermission', 'pipeline', function (cb, r) {
+							console.log(r.uploadPermission);
+							return $http({
+								method: 'PUT',
+								url: CONFIG.baseUrl + '/api/upload/' + r.uploadPermission.id + '/uploaded',
+								data: {
+									challengeResult: r.challengeResult.toString('binary')
+								}
+							})
+								.then(function (response) {
+									console.log(response);
+									return cb(null, response.data);
+								})
+								.catch(function (e) {
+									console.error(e);
+									return cb(e);
+								});
 						}]
 					}, function (e, r) {
 						if (e)

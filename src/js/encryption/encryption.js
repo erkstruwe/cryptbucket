@@ -16,7 +16,7 @@ angular
 		var randomBytes = crypto.randomBytes;
 
 		var cipherStream = function (password, cb) {
-			var salt = crypto.randomBytes(256);
+			var salt = crypto.randomBytes(255);
 			var iv = crypto.randomBytes(16);
 			return pbkdf2(password, salt, 32, function (e, key) {
 				if (e)

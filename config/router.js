@@ -6,5 +6,8 @@ module.exports = function (app, express) {
 		return res.render('homepage');
 	});
 
+	router.post('/api/upload/', controllers.UploadController.create);
+	router.put('/api/upload/:id/uploaded', controllers.UploadController.uploaded);
+
 	return router;
 };
