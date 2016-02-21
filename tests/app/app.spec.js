@@ -4,5 +4,5 @@ describe('app', function () {
 			expect(e).toBeNull();
 			return cb();
 		});
-	});
+	}, 30000);
 });
