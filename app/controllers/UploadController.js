@@ -2,7 +2,24 @@ module.exports = {
 	create: function (req, res, next) {
 		var opts = req.app.locals.lib.lodash.pick(req.body, ['salt', 'iv', 'challenge', 'challengeResult', 'files']);
 
-		return req.app.locals.models.Upload.create(opts, {include: [req.app.locals.models.File]}).nodeify(res.negotiate);
+		return req.app.locals.lib.async.auto({
+			upload: function (cb) {
+				return req.app.locals.models.Upload.create(opts, {include: [req.app.locals.models.File]}).nodeify(cb);
+			},
+			signedRequest: ['upload', function (cb, r) {
+				var params = {
+					Bucket: r.upload.bucket,
+					Key: r.upload.folder + '/' + r.upload.filename,
+					Expires: 60,
+					ContentType: 'application/octet-stream'
+				};
+
+				return req.app.locals.lib.s3.getSignedUrl('putObject', params, cb);
+			}],
+			//url: ['upload', function(cb, r) {
+			//	return cb(null, 'https://' + r.upload.bucket + '.s3.amazonaws.com/' + r.upload.folder + '/' + r.upload.filename);
+			//}]
+		}, res.negotiate);
 	},
 
 	uploaded: function (req, res, next) {

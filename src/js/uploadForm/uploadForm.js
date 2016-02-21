@@ -96,13 +96,30 @@ angular
 								});
 						}],
 						pipeline: ['cipherStream', 'uploadPermission', function (cb, r) {
-							return fileStream.through(compressionStream).through(r.cipherStream.stream).done(cb);
+							//return fileStream.through(compressionStream).through(r.cipherStream.stream).done(cb);
+
+							return $http({
+								method: 'PUT',
+								url: r.uploadPermission.signedRequest,
+								headers: {
+									'content-type': 'application/octet-stream'
+								},
+								data: 'test'
+							})
+								.then(function (response) {
+									console.log(response);
+									return cb(null, response.data);
+								})
+								.catch(function (e) {
+									console.error(e);
+									return cb(e);
+								});
 						}],
 						uploaded: ['uploadPermission', 'pipeline', function (cb, r) {
 							console.log(r.uploadPermission);
 							return $http({
 								method: 'PUT',
-								url: CONFIG.baseUrl + '/api/upload/' + r.uploadPermission.id + '/uploaded',
+								url: CONFIG.baseUrl + '/api/upload/' + r.uploadPermission.upload.id + '/uploaded',
 								data: {
 									challengeResult: r.challengeResult.toString('binary')
 								}

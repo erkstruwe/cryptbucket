@@ -33,6 +33,13 @@ module.exports = function (cb) {
 	lib.async = require('async');
 	lib.sequelize = require('sequelize');
 	lib.logger = require('winston');
+	var aws = require('aws-sdk');
+	lib.s3 = new aws.S3({
+		credentials: {
+			accessKeyId: app.locals.config.s3.accessKeyId,
+			secretAccessKey: app.locals.config.s3.secretAccessKey
+		}
+	});
 
 	// connect to database
 	var dbOptions = {
