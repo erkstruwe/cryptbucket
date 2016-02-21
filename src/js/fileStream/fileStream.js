@@ -17,8 +17,6 @@ angular
 				var offset = 0;
 				var chunkSize = CONFIG.fileStream.chunkSize;
 
-				console.log(file);
-
 				return highland(function (push, next) {
 					if (offset < file.size) {
 						blobToBuffer(file.slice(offset, offset + chunkSize - 1), function (e, buffer) {

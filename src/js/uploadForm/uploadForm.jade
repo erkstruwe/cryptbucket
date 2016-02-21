@@ -1,6 +1,6 @@
 form(ng-submit='process()', novalidate)
 	.form-group
-		div.form-control(ngf-select='', ngf-drop='', ng-model='files', required, ngf-model-invalid="invalidFiles", ngf-multiple="true", ngf-keep="false", ngf-max-files='1', ngf-change='selectFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)', ngf-max-size='{{validation.size.max}}', ngf-max-total-size='{{validation.size.maxTotal}}', ngf-validate-async-fn='validate($files)')
+		div.form-control(ngf-select='', ngf-drop='', ng-model='file', required, ngf-model-invalid="invalidFiles", ngf-multiple="false", ngf-keep="false", ngf-max-files='1', ngf-change='selectFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)', ngf-max-size='{{validation.size.max}}', ngf-max-total-size='{{validation.size.maxTotal}}', ngf-validate-async-fn='validate($files)')
 			.card-title Select or drop file here
 			p.card-text(ng-repeat='file in files', ng-bind='file.name + " (" + file.size + " bytes)"')
 	.form-group

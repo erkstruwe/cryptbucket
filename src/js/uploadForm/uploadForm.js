@@ -25,8 +25,13 @@ angular
 				};
 
 				scope.selectFiles = function ($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event) {
-					scope.status.messages.push({text: 'Selected file ' + $file.name + ', ' + $file.size + ' bytes'});
 					console.log($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event);
+					if ($newFiles) {
+						$newFiles.forEach(function (file) {
+							scope.status.messages.push({text: 'Selected ' + (file.$error ? 'invalid (' + file.$error + ')' : 'valid') + ' file ' + file.name + ', ' + file.size + ' bytes'});
+						});
+					}
+					scope.files = $files;
 				};
 
 				scope.validate = function ($files) {
