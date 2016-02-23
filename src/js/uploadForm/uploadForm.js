@@ -1,4 +1,5 @@
 // external libraries
+var request = require('request');
 
 // external modules
 require('ng-file-upload');
@@ -43,13 +44,6 @@ angular
 				};
 
 				scope.process = function () {
-					var fileStream = FileStreamService.readStream(scope.files[0], function (val) {
-						scope.status.progress = val;
-						scope.$apply();
-					});
-
-					var compressionStream = CompressionService.gzipStream({});
-
 					return async.auto({
 						cipherStream: function (cb) {
 							return EncryptionService.cipherStream(scope.password, cb);
@@ -96,24 +90,29 @@ angular
 								});
 						}],
 						pipeline: ['cipherStream', 'uploadPermission', function (cb, r) {
-							//return fileStream.through(compressionStream).through(r.cipherStream.stream).done(cb);
+							var fileStream = FileStreamService.readStream(scope.files[0], function (val) {
+								scope.status.progress = val;
+								scope.$apply();
+							});
 
-							return $http({
-								method: 'PUT',
-								url: r.uploadPermission.signedRequest,
-								headers: {
-									'content-type': 'application/octet-stream'
-								},
-								data: 'test'
-							})
-								.then(function (response) {
-									console.log(response);
-									return cb(null, response.data);
+							var compressionStream = CompressionService.gzipStream({});
+
+							var s3Stream = request
+								.put({
+									method: 'PUT',
+									url: r.uploadPermission.signedRequest,
+									headers: {
+										'content-type': 'application/octet-stream'
+									}
 								})
-								.catch(function (e) {
-									console.error(e);
-									return cb(e);
-								});
+								.on('error', cb)
+								.on('end', cb);
+
+							// hack to convince request/helpers/isReadStream that this is in fact a readable stream
+							var pipeline = fileStream.through(compressionStream).pipe(r.cipherStream.stream);
+							pipeline.path = 'cryptbucket.bin';
+							pipeline.mode = true;
+							pipeline.pipe(s3Stream);
 						}],
 						uploaded: ['uploadPermission', 'pipeline', function (cb, r) {
 							console.log(r.uploadPermission);
