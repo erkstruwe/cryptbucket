@@ -8,12 +8,11 @@ var highland = require('highland');
 require('../lodash/lodash.js');
 
 angular
-	.module('fileStream', ['config', 'lodash'])
-	.service('FileStreamService', ['CONFIG', 'lodash', function (CONFIG, lodash) {
+	.module('fileStream', ['config'])
+	.service('FileStreamService', ['CONFIG', function (CONFIG) {
 		return {
-			readStream: function (file, progress) {
+			readStream: function (file) {
 				// setup
-				var throttledProgress = lodash.throttle(progress, 250);
 				var offset = 0;
 				var chunkSize = CONFIG.fileStream.chunkSize;
 
@@ -22,7 +21,6 @@ angular
 						blobToBuffer(file.slice(offset, offset + chunkSize - 1), function (e, buffer) {
 							push(e, buffer);
 							offset += chunkSize;
-							throttledProgress(lodash.min([offset / file.size, 1]));
 							next();
 						});
 					} else {

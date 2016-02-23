@@ -8,9 +8,10 @@ form(ng-submit='process()', novalidate)
 	.form-group
 		button.btn.btn-primary(type='submit') Encrypt to console
 	.form-group
-		progress.progress.progress-success(ng-bind='(status.progress * 100 | number: 0) + " %"', ng-value='status.progress', max='1')
+		progress.progress.progress-success(ng-bind='(status.cipherStreamProgress.percentage | number: 0) + " %"', ng-value='status.cipherStreamProgress.percentage / 100', max='1')
+		progress.progress.progress-success(ng-bind='(status.s3StreamProgress.percentage | number: 0) + " %"', ng-value='status.s3StreamProgress.percentage / 100', max='1')
 	p
-		samp(ng-bind="'Progress: ' + (status.progress * 100 | number: 0) + ' %'")
+		samp(ng-bind="'Progress: ' + (status.cipherStreamProgress.percentage | number: 0) + ' %'")
 		br
 		samp(ng-repeat-start='message in status.messages', ng-bind='message.text')
 		br(ng-repeat-end)

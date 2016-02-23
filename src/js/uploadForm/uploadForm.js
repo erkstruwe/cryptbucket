@@ -1,4 +1,7 @@
 // external libraries
+var request = require('request');
+var highland = require('highland');
+var progressStream = require('progress-stream');
 
 // external modules
 require('ng-file-upload');
@@ -9,10 +12,11 @@ require('../lodash/lodash.js');
 require('../fileStream/fileStream.js');
 require('../compression/compression.js');
 require('../encryption/encryption.js');
+require('../s3/s3.js');
 
 angular
-	.module('uploadForm', ['ngFileUpload', 'config', 'async', 'lodash', 'fileStream', 'compression', 'encryption'])
-	.directive('uploadForm', ['Upload', 'CONFIG', 'async', 'lodash', 'FileStreamService', 'CompressionService', 'EncryptionService', '$http', function (Upload, CONFIG, async, lodash, FileStreamService, CompressionService, EncryptionService, $http) {
+	.module('uploadForm', ['ngFileUpload', 'config', 'async', 'lodash', 'fileStream', 'compression', 'encryption', 's3'])
+	.directive('uploadForm', ['Upload', 'CONFIG', 'async', 'lodash', 'FileStreamService', 'CompressionService', 'EncryptionService', 'S3Service', '$http', function (Upload, CONFIG, async, lodash, FileStreamService, CompressionService, EncryptionService, S3Service, $http) {
 		return {
 			templateUrl: CONFIG.baseUrlStatic + '/uploadForm.html',
 			link: function (scope, element, attrs) {
@@ -21,7 +25,10 @@ angular
 				scope.password = '';
 				scope.validation = CONFIG.uploadForm.validation;
 				scope.status = {
-					progress: 0,
+					cipherStreamProgress: {
+						percentage: 0
+					},
+					s3StreamProgress: {},
 					messages: []
 				};
 
@@ -43,13 +50,6 @@ angular
 				};
 
 				scope.process = function () {
-					var fileStream = FileStreamService.readStream(scope.files[0], function (val) {
-						scope.status.progress = val;
-						scope.$apply();
-					});
-
-					var compressionStream = CompressionService.gzipStream({});
-
 					return async.auto({
 						cipherStream: function (cb) {
 							return EncryptionService.cipherStream(scope.password, cb);
@@ -61,7 +61,6 @@ angular
 							return EncryptionService.pbkdf2(scope.password, r.challenge, 255, cb);
 						}],
 						uploadPermission: ['cipherStream', 'challenge', 'challengeResult', function (cb, r) {
-							console.log(r);
 							scope.status.messages.push({text: 'password: not shown'});
 							scope.status.messages.push({text: 'salt: ' + r.cipherStream.salt.toString('base64')});
 							scope.status.messages.push({text: 'iv: ' + r.cipherStream.iv.toString('base64')});
@@ -87,7 +86,6 @@ angular
 								}
 							})
 								.then(function (response) {
-									console.log(response);
 									return cb(null, response.data);
 								})
 								.catch(function (e) {
@@ -96,27 +94,26 @@ angular
 								});
 						}],
 						pipeline: ['cipherStream', 'uploadPermission', function (cb, r) {
-							//return fileStream.through(compressionStream).through(r.cipherStream.stream).done(cb);
+							var fileStream = FileStreamService.readStream(scope.files[0]);
 
-							return $http({
-								method: 'PUT',
-								url: r.uploadPermission.signedRequest,
-								headers: {
-									'content-type': 'application/octet-stream'
-								},
-								data: 'test'
-							})
-								.then(function (response) {
-									console.log(response);
-									return cb(null, response.data);
-								})
-								.catch(function (e) {
-									console.error(e);
-									return cb(e);
-								});
+							var compressionStream = CompressionService.gzipStream({});
+
+							var cipherStreamProgress = progressStream({
+								length: scope.files[0].size,
+								time: 250
+							});
+							cipherStreamProgress.on('progress', function (progress) {
+								scope.status.cipherStreamProgress = progress;
+								scope.$apply();
+							});
+
+							var s3Stream = S3Service.uploadStream(r.uploadPermission.signedRequest);
+
+							console.log(s3Stream);
+
+							return fileStream.through(compressionStream).through(r.cipherStream.stream).through(cipherStreamProgress).through(s3Stream).done(cb);
 						}],
 						uploaded: ['uploadPermission', 'pipeline', function (cb, r) {
-							console.log(r.uploadPermission);
 							return $http({
 								method: 'PUT',
 								url: CONFIG.baseUrl + '/api/upload/' + r.uploadPermission.upload.id + '/uploaded',
@@ -125,7 +122,6 @@ angular
 								}
 							})
 								.then(function (response) {
-									console.log(response);
 									return cb(null, response.data);
 								})
 								.catch(function (e) {
@@ -138,7 +134,8 @@ angular
 							return console.error(e);
 
 						console.log(r);
-						return scope.status.messages.push({text: 'done'});
+						scope.status.messages.push({text: 'done'});
+						scope.$apply();
 					});
 				};
 			}

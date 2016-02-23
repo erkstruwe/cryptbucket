@@ -1,6 +1,6 @@
 // external libraries
 var crypto = require('crypto');
-//var triplesec = require('triplesec');
+var highland = require('highland');
 
 // external modules
 
@@ -26,6 +26,19 @@ angular
 					stream: crypto.createCipheriv('aes-256-ctr', key, iv),
 					salt: salt,
 					iv: iv
+				});
+
+				return highland.pipeline(function (stream) {
+					var cipherStream = crypto.createCipheriv('aes-256-ctr', key, iv);
+					// hack to convince request/helpers/isReadStream that this is in fact a readable stream
+					stream.path = 'cryptbucket.bin';
+					stream.mode = true;
+					stream.pipe(cipherStream);
+					return cb(null, {
+						stream: cipherStream,
+						salt: salt,
+						iv: iv
+					});
 				});
 			});
 		};
