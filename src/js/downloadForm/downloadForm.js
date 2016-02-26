@@ -65,14 +65,14 @@ angular
 						decipherStream: ['upload', 'downloadPermission', function (cb, r) {
 							return EncryptionService.decipherStream(r.upload.salt, r.downloadPermission.iv, scope.password, cb);
 						}],
-						pipeline: ['downloadPermission', function (cb, r) {
-							var downloadStream = request.get(r.downloadPermission.signedRequest);
+						pipeline: ['downloadPermission', 'decipherStream', function (cb, r) {
+							var downloadStream = highland(request.get(r.downloadPermission.signedRequest));
 
 							var decompressionStream = CompressionService.gunzipStream({});
 
 							console.log(123, r, downloadStream, decompressionStream);
 
-							return downloadStream.pipe(r.decipherStream).pipe(decompressionStream);
+							return downloadStream.through(r.decipherStream).through(decompressionStream).done(cb);
 						}]
 					}, function (e, r) {
 						if (e)
