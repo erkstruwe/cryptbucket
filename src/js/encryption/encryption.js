@@ -30,9 +30,19 @@ angular
 			});
 		};
 
+		var decipherStream = function (salt, iv, password, cb) {
+			return pbkdf2(password, salt, 32, function (e, key) {
+				if (e)
+					return cb(e);
+
+				return cb(null, crypto.createCipheriv('aes-256-ctr', key, iv));
+			});
+		};
+
 		return {
 			pbkdf2: pbkdf2,
 			randomBytes: randomBytes,
-			cipherStream: cipherStream
+			cipherStream: cipherStream,
+			decipherStream: decipherStream
 		};
 	}]);

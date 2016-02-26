@@ -11,6 +11,10 @@ angular
 		return {
 			gzipStream: function (opts) {
 				return zlib.createGzip(opts);
+			},
+
+			gunzipStream: function (opts) {
+				return zlib.createGunzip(opts);
 			}
 		};
 	}]);

@@ -1,6 +1,7 @@
 // external libraries
 var request = require('request');
 var requestProgress = require('request-progress');
+var highland = require('highland');
 
 // external modules
 
@@ -53,7 +54,25 @@ angular
 								params: {
 									challengeResult: r.challengeResult.toString('binary')
 								}
-							});
+							})
+								.then(function (response) {
+									return cb(null, response.data);
+								})
+								.catch(function (error) {
+									return cb(error);
+								});
+						}],
+						decipherStream: ['upload', 'downloadPermission', function (cb, r) {
+							return EncryptionService.decipherStream(r.upload.salt, r.downloadPermission.iv, scope.password, cb);
+						}],
+						pipeline: ['downloadPermission', function (cb, r) {
+							var downloadStream = request.get(r.downloadPermission.signedRequest);
+
+							var decompressionStream = CompressionService.gunzipStream({});
+
+							console.log(123, r, downloadStream, decompressionStream);
+
+							return downloadStream.pipe(r.decipherStream).pipe(decompressionStream);
 						}]
 					}, function (e, r) {
 						if (e)

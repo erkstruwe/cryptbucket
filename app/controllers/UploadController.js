@@ -74,7 +74,10 @@ module.exports = {
 			if (!r.upload)
 				return res.sendStatus(404);
 
-			return res.send(r.signedRequest);
+			return res.send({
+				signedRequest: r.signedRequest,
+				iv: r.upload.iv
+			});
 		});
 	}
 };
