@@ -1,4 +1,4 @@
-form(ng-submit='process()', novalidate)
+form(name='uploadForm', ng-submit='process()', novalidate)
 	.form-group
 		div.form-control(ngf-select='', ngf-drop='', ng-model='file', required, ngf-model-invalid="invalidFiles", ngf-multiple="false", ngf-keep="false", ngf-max-files='1', ngf-change='selectFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)', ngf-max-size='{{validation.size.max}}', ngf-max-total-size='{{validation.size.maxTotal}}', ngf-validate-async-fn='validate($files)')
 			.card-title Select or drop file here
@@ -6,12 +6,22 @@ form(ng-submit='process()', novalidate)
 	.form-group
 		input.form-control(type='password', ng-model='password', required, minLength='8', placeholder='Password')
 	.form-group
-		button.btn.btn-primary(type='submit') Encrypt to console
-	.form-group
-		progress.progress.progress-success(ng-bind='(status.cipherStreamProgress.percentage | number: 0) + " %"', ng-value='status.cipherStreamProgress.percentage / 100', max='1')
-		progress.progress.progress-success(ng-bind='(status.s3StreamProgress.percentage | number: 0) + " %"', ng-value='status.s3StreamProgress.percentage / 100', max='1')
-	p
-		samp(ng-bind="'Progress: ' + (status.cipherStreamProgress.percentage | number: 0) + ' %'")
-		br
-		samp(ng-repeat-start='message in status.messages', ng-bind='message.text')
-		br(ng-repeat-end)
+		button.btn.btn-primary(type='submit', ng-disabled='!uploadForm.$valid') Encrypt and upload
+
+	.form-group(ng-if='uploadForm.$submitted')
+		span.col-xs-6.col-sm-4.col-md-3 Encryption
+		.col-xs-6.col-sm-8.col-md-9
+			progress.progress.progress-danger(ng-bind='(status.cipherStreamProgress.percentage | number: 0) + " %"', ng-value='status.cipherStreamProgress.percentage / 100', max='1')
+		span.col-xs-6.col-sm-4.col-md-3 Upload
+		.col-xs-6.col-sm-8.col-md-9
+			progress.progress.progress-info(ng-bind='(status.uploadProgress.percentage | number: 0) + " %"', ng-value='status.uploadProgress.percentage / 100', max='1')
+		span.col-xs-6.col-sm-4.col-md-3 Overall
+		.col-xs-6.col-sm-8.col-md-9
+			progress.progress.progress-success(ng-bind='((status.cipherStreamProgress.percentage + status.uploadProgress.percentage) / 2 | number: 0) + " %"', ng-value='(status.cipherStreamProgress.percentage + status.uploadProgress.percentage) / 2 / 100', max='1')
+
+	.form-group(ng-if='uploadedFile')
+		p.h3 Your file
+		.input-group
+			input.form-control(type='text', ng-model='uploadedFile', readonly)
+			span.input-group-btn
+				button.btn.btn-success(type='button', clipboard, text='uploadedFile', ng-click='copyToClipboard(uploadedFile)'): i.fa.fa-clipboard

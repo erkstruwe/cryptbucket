@@ -38,7 +38,7 @@ module.exports = function (app) {
 		},
 		encryption: {
 			pbkdf2: {
-				iterations: 1000,
+				iterations: 1336,
 				digest: 'sha256'
 			}
 		}

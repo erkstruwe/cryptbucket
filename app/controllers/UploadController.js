@@ -10,7 +10,8 @@ module.exports = {
 				var params = {
 					Bucket: r.upload.bucket,
 					Key: r.upload.folder + '/' + r.upload.filename,
-					Expires: 10
+					Expires: 86400, // 1d
+					ContentType: 'application/json;charset=utf-8'
 				};
 
 				return req.app.locals.lib.s3.getSignedUrl('putObject', params, cb);
