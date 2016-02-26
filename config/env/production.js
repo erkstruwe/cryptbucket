@@ -15,7 +15,7 @@ module.exports = function (app) {
 			logLevel: 'verbose'
 		},
 		s3: {
-			defaultBucket: 'cryptbucket-dev',
+			defaultBucket: 'cryptbucket-prod',
 			defaultFolder: 'standard',
 			accessKeyId: process.env.S3_ACCESS_KEY_ID,
 			secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
