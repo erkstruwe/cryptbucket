@@ -19,21 +19,22 @@ angular
 	.directive('uploadForm', ['Upload', 'CONFIG', 'async', 'lodash', 'FileStreamService', 'CompressionService', 'EncryptionService', '$http', function (Upload, CONFIG, async, lodash, FileStreamService, CompressionService, EncryptionService, $http) {
 		return {
 			templateUrl: CONFIG.baseUrlStatic + '/uploadForm.html',
-			link: function (scope, element, attrs) {
-				scope.files = [];
-				scope.invalidFiles = [];
-				scope.password = '';
-				scope.validation = CONFIG.uploadForm.validation;
-				scope.uploadedFile = null;
-				scope.status = {
+			scope: {
+				file: [],
+				invalidFiles: [],
+				password: '',
+				validation: CONFIG.uploadForm.validation,
+				uploadedFile: null,
+				status: {
 					cipherStreamProgress: {
 						percentage: 0
 					},
 					uploadProgress: {
 						percentage: 0
 					}
-				};
-
+				}
+			},
+			link: function (scope, element, attrs) {
 				scope.selectFiles = function ($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event) {
 					console.log($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event);
 					if ($newFiles) {
@@ -151,7 +152,7 @@ angular
 							return console.error(e);
 
 						console.log('Done', r);
-						scope.uploadedFile = CONFIG.baseUrl + '/file/' + r.uploadPermission.upload.id;
+						scope.uploadedFile = CONFIG.baseUrl + '/download/' + r.uploadPermission.upload.id;
 						return scope.$apply();
 					});
 				};

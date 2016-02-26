@@ -9,9 +9,10 @@ require('fastclick')(document.body);
 
 // components
 require('../uploadForm/uploadForm.js');
+require('../downloadForm/downloadForm.js');
 
 angular
-	.module('cryptbucket', ['config', 'uploadForm'])
+	.module('cryptbucket', ['config', 'uploadForm', 'downloadForm'])
 	.config(['CONFIG', '$sceDelegateProvider', function (CONFIG, $sceDelegateProvider) {
 		$sceDelegateProvider.resourceUrlWhitelist([
 			'self',

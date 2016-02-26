@@ -34,5 +34,47 @@ module.exports = {
 
 			return res.send();
 		});
+	},
+
+	findById: function (req, res, next) {
+		var opts = {
+			id: req.params.id
+		};
+
+		return req.app.locals.models.Upload.findById(opts.id).nodeify(res.negotiate);
+	},
+
+	downloadPermission: function (req, res, next) {
+		var opts = {
+			id: req.params.id,
+			challengeResult: req.query.challengeResult
+		};
+
+		return req.app.locals.lib.async.auto({
+			upload: function (cb) {
+				return req.app.locals.models.Upload.find({where: opts}).nodeify(cb);
+			},
+			signedRequest: ['upload', function (cb, r) {
+				if (!r.upload)
+					return cb();
+
+				var params = {
+					Bucket: r.upload.bucket,
+					Key: r.upload.folder + '/' + r.upload.filename,
+					Expires: 86400, // 1d
+					//ContentType: 'application/json;charset=utf-8'
+				};
+
+				return req.app.locals.lib.s3.getSignedUrl('getObject', params, cb);
+			}]
+		}, function (e, r) {
+			if (e)
+				return res.negotiate(e);
+
+			if (!r.upload)
+				return res.sendStatus(404);
+
+			return res.send(r.signedRequest);
+		});
 	}
 };

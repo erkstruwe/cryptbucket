@@ -1,0 +1,18 @@
+pre(ng-bind='uploadId')
+
+form(name='downloadForm', ng-submit='process()', novalidate)
+	.form-group
+		input.form-control(type='password', ng-model='password', required, minLength='8', placeholder='Password')
+	.form-group
+		button.btn.btn-primary(type='submit', ng-disabled='!downloadForm.$valid') Download and decrypt
+
+	.form-group(ng-if='uploadForm.$submitted')
+		span.col-xs-6.col-sm-4.col-md-3 Download
+		.col-xs-6.col-sm-8.col-md-9
+			progress.progress.progress-danger(ng-bind='(status.downloadStreamProgress.percentage | number: 0) + " %"', ng-value='status.downloadStreamProgress.percentage / 100', max='1')
+		span.col-xs-6.col-sm-4.col-md-3 Decryption
+		.col-xs-6.col-sm-8.col-md-9
+			progress.progress.progress-info(ng-bind='(status.decipherStreamProgress.percentage | number: 0) + " %"', ng-value='status.decipherStreamProgress.percentage / 100', max='1')
+		span.col-xs-6.col-sm-4.col-md-3 Overall
+		.col-xs-6.col-sm-8.col-md-9
+			progress.progress.progress-success(ng-bind='((status.downloadStreamProgress.percentage + status.decipherStreamProgress.percentage) / 2 | number: 0) + " %"', ng-value='(status.downloadStreamProgress.percentage + status.decipherStreamProgress.percentage) / 2 / 100', max='1')

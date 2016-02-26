@@ -11,7 +11,7 @@ module.exports = function (app) {
 			user: process.env.DB_USER,
 			password: process.env.DB_PASSWORD,
 			sync: true,
-			forceSync: true, // Attention! This will drop all tables if true!
+			forceSync: false, // Attention! This will drop all tables if true!
 			logLevel: 'info'
 		},
 		s3: {
