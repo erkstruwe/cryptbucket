@@ -6,5 +6,5 @@ describe('encryption module', function () {
 
 		it('should just work', function () {
 		});
-	})
+	});
 });

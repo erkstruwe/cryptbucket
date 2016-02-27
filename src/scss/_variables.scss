@@ -1,14 +1,16 @@
-/* http://paletton.com/#uid=72b0E0ktGqejHwuoPtIvMliEfgd */
+/* http://www.paletton.com/#uid=64c0Z0koAvd7VTfhLEnuooSDvfv */
 $gray-dark: #373a3c;
 $gray: #55595c;
 $gray-light: #818a91;
 $gray-lighter: #eceeef;
 $gray-lightest: #f7f7f9;
-$brand-primary: #006700;
-$brand-success: #006700;
-$brand-info: #930b7e;
-$brand-warning: #930b7e;
-$brand-danger: #aa0101;
+
+$brand-primary: #5037ac; /* can be written on in white and black, writes on white */
+$brand-secondary: #c3b8ec; /* can be written on in black, writes on black */
+$brand-success: #067c6c; /* can be written on in white, writes on white */
+$brand-info: #2e1689; /* can be written on in white, writes on white */
+$brand-warning: #f9d63a; /* can be written on in black, writes on black */
+$brand-danger: #c62e87; /* can be written on in white, writes on white */
 
 $enable-flex: false;
 $enable-rounded: true;
@@ -18,7 +20,7 @@ $enable-transitions: true;
 $enable-hover-media-query: false;
 $enable-grid-classes: true;
 
-$body-bg: $gray-lightest;
+$body-bg: #fff;
 $body-color: $gray-dark;
 
 $link-color: $brand-primary;
@@ -32,3 +34,27 @@ $font-family-monospace: Menlo, Monaco, Consolas, "Courier New", monospace;
 $font-family-base: $font-family-sans-serif;
 
 $font-size-root: 16px;
+
+$btn-primary-color: #fff;
+$btn-primary-bg: $brand-primary;
+$btn-primary-border: $btn-primary-bg;
+
+$btn-secondary-color: $body-color;
+$btn-secondary-bg: $brand-secondary;
+$btn-secondary-border: $btn-secondary-bg;
+
+$btn-info-color: #fff;
+$btn-info-bg: $brand-info;
+$btn-info-border: $btn-info-bg;
+
+$btn-success-color: #fff;
+$btn-success-bg: $brand-success;
+$btn-success-border: $btn-success-bg;
+
+$btn-warning-color: $body-color;
+$btn-warning-bg: $brand-warning;
+$btn-warning-border: $btn-warning-bg;
+
+$btn-danger-color: #fff;
+$btn-danger-bg: $brand-danger;
+$btn-danger-border: $btn-danger-bg;

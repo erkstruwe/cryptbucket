@@ -1,5 +1,4 @@
 // external libraries
-var highland = require('highland');
 var progressStream = require('progress-stream');
 var blobStream = require('blob-stream');
 
@@ -28,10 +27,12 @@ angular
 				scope.uploadedFile = null;
 				scope.status = {
 					cipherStreamProgress: {
-						percentage: 0
+						percentage: 0,
+						speed: 0
 					},
 					uploadProgress: {
-						percentage: 0
+						percentage: 0,
+						loaded: 0
 					}
 				};
 
@@ -102,8 +103,8 @@ angular
 								length: scope.files[0].size,
 								time: 250
 							});
-							cipherStreamProgress.on('progress', function (progress) {
-								scope.status.cipherStreamProgress = progress;
+							cipherStreamProgress.on('progress', function (state) {
+								scope.status.cipherStreamProgress = state;
 								scope.$apply();
 							});
 
@@ -131,6 +132,7 @@ angular
 											return cb(e);
 										}, function (evt) {
 											scope.status.uploadProgress.percentage = evt.loaded / evt.total * 100;
+											scope.status.uploadProgress.loaded = evt.loaded;
 										});
 								});
 						}],

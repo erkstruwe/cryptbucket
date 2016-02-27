@@ -1,24 +1,32 @@
 doctype html
 html(lang='en')
 	head
-		title Cryptbucket
+		block meta
+			title Cryptbucket
+
 		meta(charset='utf-8')
 		meta(name='viewport', content='width=device-width,initial-scale=1,shrink-to-fit=no')
 		meta(http-equiv='x-ua-compatible', content='ie=edge')
 		link(rel='stylesheet', href=config.baseUrlStatic + '/styles.css')
 
 	body
+		nav.navbar
+			a(href=config.baseUrl).navbar-brand Cryptbucket
+			ul.nav.navbar-nav
+				li.nav-item
+					a.nav-link(href='/imprint') Imprint
 
 		header
-
-		nav
+			block header
 
 		main(ng-app='cryptbucket', ng-strict-di)
 			block main
 
 		footer
+			.jumbotron.jumbotron-fluid
+				p.text-xs-center &copy; 2016
 
-	script(src=config.baseUrlStatic + '/app.js')
-	script angular.module('config', []).constant('CONFIG', JSON.parse('!{JSON.stringify(configFrontend)}'));
-	if (config.environment == 'development')
-		script document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1" async></' + 'script>');
+		script(src=config.baseUrlStatic + '/app.js')
+		script angular.module('config', []).constant('CONFIG', JSON.parse('!{JSON.stringify(configFrontend)}'));
+		if (config.environment == 'development')
+			script document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1" async></' + 'script>');

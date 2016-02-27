@@ -25,10 +25,8 @@ angular
 				scope.downloadedFile = null;
 				scope.status = {
 					downloadStreamProgress: {
-						percentage: 0
-					},
-					decipherStreamProgress: {
-						percentage: 0
+						percentage: 0,
+						speed: 0
 					}
 				};
 
@@ -68,16 +66,21 @@ angular
 							return EncryptionService.decipherStream(new Buffer(r.upload.salt, 'binary'), new Buffer(r.downloadPermission.iv, 'binary'), scope.password, cb);
 						}],
 						pipeline: ['downloadPermission', 'decipherStream', function (cb, r) {
-							var downloadStream = highland(request.get(r.downloadPermission.signedRequest));
+							var downloadStream = requestProgress(request.get(r.downloadPermission.signedRequest), {throttle: 250});
+							downloadStream.on('progress', function (state) {
+								scope.status.downloadStreamProgress = state;
+								scope.$apply();
+							});
 
 							var decompressionStream = CompressionService.gunzipStream({});
 
-							return downloadStream
+							return highland(downloadStream)
 								.through(r.decipherStream)
 								.through(decompressionStream)
 								.pipe(blobStream())
 								.on('finish', function () {
 									scope.downloadedFile = this.toBlobURL();
+									scope.status.downloadStreamProgress.percentage = 100;
 									scope.$apply();
 								});
 						}]

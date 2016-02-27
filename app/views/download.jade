@@ -1,0 +1,9 @@
+extends layout
+
+block header
+	include header
+
+block main
+	.jumbotron.jumbotron-fluid.bg-white
+		.container
+			p: download-form(upload-id=uploadId)

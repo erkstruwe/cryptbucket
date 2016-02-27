@@ -3,3 +3,21 @@
 
 $fa-font-path: 'fonts';
 @import 'font-awesome/scss/font-awesome.scss';
+
+// bootstrap overrides
+.jumbotron {
+  margin-bottom: 0;
+}
+
+// own css
+.text-white {
+  color: #fff;
+}
+
+.bg-white {
+  background-color: #fff;
+}
+
+.bg-secondary {
+  background-color: $brand-secondary;
+}

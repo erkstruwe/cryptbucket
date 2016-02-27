@@ -1,35 +1,26 @@
 extends layout
 
-block main
-	.jumbotron.jumbotron-fluid
-		.container
-			h1.display-4 Welcome to Cryptbucket
-			p.lead Upload your files to our end-to-end encrypted, open-source filehosting service
+block header
+	include header
 
+block main
 	// hero shot
 
-	.container
-		p
-			upload-form
+	.jumbotron.jumbotron-fluid.bg-white
+		.container(id='try')
+			h2.text-xs-center Try now
+			p: upload-form
 
-	.container
-		.row
-			.col-xs-12
-				h2 Benefits
-				.row
-					each feature, index in [{title: 'End-to-end encryption', subtitle: 'Protect your data from hackers, intelligence, and even from ourselves', icon: 'lock', color: 'danger', text: 'You and the persons you share the password with are the only ones able to recover your decrypted data, even though it is physically stored at our partner Amazon\'s data centers. That\'s because your files are encrypted by your browser <em>before</em> being sent. Your password is never sent anywhere.'}, {title: 'Open source code', subtitle: 'Review our code and decide to trust our technology', icon: 'file-code-o', color: 'success', text: 'The full source code is publicly available at our <a href="https://github.com/erkstruwe/cryptbucket" target="_blank">Github</a> repository. Feel free to clone it and see for yourself that we keep our security promises.'}]
-						.col-md-6
-							.card
-								.card-block
-									h4.card-title= feature.title
-									h6.card-subtitle.text-muted= feature.subtitle
-								.card-block
-									p.card-text.text-xs-center
-										span.fa.fa-4x(class='fa-' + feature.icon + ' text-' + feature.color)
-								.card-block
-									p.card-text !{feature.text}
-						if index % 2 == 1
-							.clearfix
+	.jumbotron.jumbotron-fluid
+		.container(id='learn')
+			.row
+				each feature, index in [{title: 'End-to-end encryption', subtitle: 'Protect your data from hackers, intelligence, and even from ourselves', icon: 'lock', color: 'danger', text: 'You and the persons you share the password with are the only ones able to recover your decrypted data, even though it is physically stored at our partner Amazon\'s data centers. That\'s because your files are encrypted in your browser <em>before</em> being sent. Your password is never sent anywhere.'}, {title: 'Open source code', subtitle: 'Review our code and decide to trust our technology', icon: 'file-code-o', color: 'success', text: 'The full source code is publicly available at our <a href="https://github.com/erkstruwe/cryptbucket" target="_blank">Github</a> repository. Feel free to clone it and see for yourself that we keep our security promises.'}]
+					.col-xs-12.col-md-6.col-lg-4
+						p.h4= feature.title
+						p.h6.text-muted= feature.subtitle
+						p.text-xs-center
+							span.fa.fa-4x(class='fa-' + feature.icon + ' text-' + feature.color)
+						p.text-justify !{feature.text}
 
-		// context of use
-		// trust elements
+	// context of use
+	// trust elements

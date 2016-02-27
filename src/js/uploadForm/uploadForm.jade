@@ -6,21 +6,23 @@ form(name='uploadForm', ng-submit='process()', novalidate)
 	.form-group
 		input.form-control(type='password', ng-model='password', required, minLength='8', placeholder='Password')
 	.form-group
-		button.btn.btn-primary(type='submit', ng-disabled='!uploadForm.$valid') Encrypt and upload
+		button.btn.btn-success(type='submit', ng-disabled='!uploadForm.$valid') Encrypt and upload
 
 	.form-group(ng-if='uploadForm.$submitted')
-		span.col-xs-6.col-sm-4.col-md-3 Encryption
-		.col-xs-6.col-sm-8.col-md-9
-			progress.progress.progress-danger(ng-bind='(status.cipherStreamProgress.percentage | number: 0) + " %"', ng-value='status.cipherStreamProgress.percentage / 100', max='1')
-		span.col-xs-6.col-sm-4.col-md-3 Upload
-		.col-xs-6.col-sm-8.col-md-9
-			progress.progress.progress-info(ng-bind='(status.uploadProgress.percentage | number: 0) + " %"', ng-value='status.uploadProgress.percentage / 100', max='1')
-		span.col-xs-6.col-sm-4.col-md-3 Overall
-		.col-xs-6.col-sm-8.col-md-9
-			progress.progress.progress-success(ng-bind='((status.cipherStreamProgress.percentage + status.uploadProgress.percentage) / 2 | number: 0) + " %"', ng-value='(status.cipherStreamProgress.percentage + status.uploadProgress.percentage) / 2 / 100', max='1')
+		.row
+			span.col-xs-6.col-sm-4.col-md-3 Encryption #[br] ({{status.cipherStreamProgress.speed / 1024 | number: 0}} kB/s)
+			.col-xs-6.col-sm-8.col-md-9
+				progress.progress.progress-danger(ng-bind='(status.cipherStreamProgress.percentage | number: 0) + " %"', ng-value='status.cipherStreamProgress.percentage / 100', max='1')
+		.row
+			span.col-xs-6.col-sm-4.col-md-3 Upload #[br] ({{status.uploadProgress.loaded / 1024 | number: 0}} kB)
+			.col-xs-6.col-sm-8.col-md-9
+				progress.progress.progress-info(ng-bind='(status.uploadProgress.percentage | number: 0) + " %"', ng-value='status.uploadProgress.percentage / 100', max='1')
+		.row
+			span.col-xs-6.col-sm-4.col-md-3 Overall
+			.col-xs-6.col-sm-8.col-md-9
+				progress.progress.progress-success(ng-bind='((status.cipherStreamProgress.percentage + status.uploadProgress.percentage) / 2 | number: 0) + " %"', ng-value='(status.cipherStreamProgress.percentage + status.uploadProgress.percentage) / 2 / 100', max='1')
 
 	.form-group(ng-if='uploadedFile')
-		p.h3 Your file
 		.input-group
 			input.form-control(type='text', ng-model='uploadedFile', readonly)
 			span.input-group-btn
