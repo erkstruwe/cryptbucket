@@ -22,6 +22,17 @@ npm start
 ```
 The package is built and run on the port specified in `.env`.
 
+### Develop
+Run the following commands in parallel.
+```
+npm run build:static
+npm run watch:html
+npm run watch:css
+npm run watch:js
+npm run watch:app
+npm run livereload
+```
+
 ## Contribute
 This is work in progress. Although I appreciate any help, please do not send PRs on your own. Instead, feel free to contact me.
 
