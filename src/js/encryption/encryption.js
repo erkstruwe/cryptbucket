@@ -35,7 +35,7 @@ angular
 				if (e)
 					return cb(e);
 
-				return cb(null, crypto.createCipheriv('aes-256-ctr', key, iv));
+				return cb(null, crypto.createDecipheriv('aes-256-ctr', key, iv));
 			});
 		};
 

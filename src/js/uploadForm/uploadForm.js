@@ -19,22 +19,22 @@ angular
 	.directive('uploadForm', ['Upload', 'CONFIG', 'async', 'lodash', 'FileStreamService', 'CompressionService', 'EncryptionService', '$http', function (Upload, CONFIG, async, lodash, FileStreamService, CompressionService, EncryptionService, $http) {
 		return {
 			templateUrl: CONFIG.baseUrlStatic + '/uploadForm.html',
-			scope: {
-				file: [],
-				invalidFiles: [],
-				password: '',
-				validation: CONFIG.uploadForm.validation,
-				uploadedFile: null,
-				status: {
+			scope: {},
+			link: function (scope, element, attrs) {
+				scope.file = [];
+				scope.invalidFiles = [];
+				scope.password = '';
+				scope.validation = CONFIG.uploadForm.validation;
+				scope.uploadedFile = null;
+				scope.status = {
 					cipherStreamProgress: {
 						percentage: 0
 					},
 					uploadProgress: {
 						percentage: 0
 					}
-				}
-			},
-			link: function (scope, element, attrs) {
+				};
+
 				scope.selectFiles = function ($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event) {
 					console.log($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event);
 					if ($newFiles) {
