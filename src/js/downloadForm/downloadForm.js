@@ -72,10 +72,14 @@ angular
 
 							var decompressionStream = CompressionService.gunzipStream({});
 
-							return downloadStream.through(r.decipherStream).through(decompressionStream).pipe(blobStream()).on('finish', function () {
-								scope.downloadedFile = this.toBlobURL();
-								scope.$apply();
-							});
+							return downloadStream
+								.through(r.decipherStream)
+								.through(decompressionStream)
+								.pipe(blobStream())
+								.on('finish', function () {
+									scope.downloadedFile = this.toBlobURL();
+									scope.$apply();
+								});
 						}]
 					}, function (e, r) {
 						if (e)

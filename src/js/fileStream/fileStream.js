@@ -18,7 +18,7 @@ angular
 
 				return highland(function (push, next) {
 					if (offset < file.size) {
-						blobToBuffer(file.slice(offset, offset + chunkSize - 1), function (e, buffer) {
+						blobToBuffer(file.slice(offset, offset + chunkSize), function (e, buffer) {
 							push(e, buffer);
 							offset += chunkSize;
 							next();

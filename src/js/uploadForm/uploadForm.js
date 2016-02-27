@@ -109,25 +109,30 @@ angular
 
 							console.log('Encrypting');
 
-							return fileStream.through(compressionStream).through(r.cipherStream.stream).through(cipherStreamProgress).pipe(blobStream()).on('finish', function () {
-								var blob = this.toBlob();
+							return fileStream
+								.through(compressionStream)
+								.through(r.cipherStream.stream)
+								.through(cipherStreamProgress)
+								.pipe(blobStream())
+								.on('finish', function () {
+									var blob = this.toBlob();
 
-								console.log('Uploading');
+									console.log('Uploading');
 
-								return Upload.http({
-									method: 'PUT',
-									url: r.uploadPermission.signedRequest,
-									data: blob
-								})
-									.then(function (response) {
-										return cb(null, response);
-									}, function (e) {
-										console.error(e);
-										return cb(e);
-									}, function (evt) {
-										scope.status.uploadProgress.percentage = evt.loaded / evt.total * 100;
-									});
-							});
+									return Upload.http({
+											method: 'PUT',
+											url: r.uploadPermission.signedRequest,
+											data: blob
+										})
+										.then(function (response) {
+											return cb(null, response);
+										}, function (e) {
+											console.error(e);
+											return cb(e);
+										}, function (evt) {
+											scope.status.uploadProgress.percentage = evt.loaded / evt.total * 100;
+										});
+								});
 						}],
 						uploaded: ['uploadPermission', 'pipeline', function (cb, r) {
 							console.log('Finalizing upload');
