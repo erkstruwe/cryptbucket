@@ -2,6 +2,7 @@
 var request = require('request');
 var requestProgress = require('request-progress');
 var highland = require('highland');
+var blobStream = require('blob-stream');
 
 // external modules
 
@@ -21,6 +22,7 @@ angular
 			},
 			link: function (scope, element, attrs) {
 				scope.password = '';
+				scope.downloadedFile = null;
 				scope.status = {
 					downloadStreamProgress: {
 						percentage: 0
@@ -45,7 +47,7 @@ angular
 								});
 						},
 						challengeResult: ['upload', function (cb, r) {
-							return EncryptionService.pbkdf2(scope.password, r.upload.challenge, 255, cb);
+							return EncryptionService.pbkdf2(scope.password, new Buffer(r.upload.challenge, 'binary'), 255, cb);
 						}],
 						downloadPermission: ['challengeResult', function (cb, r) {
 							return $http({
@@ -63,16 +65,17 @@ angular
 								});
 						}],
 						decipherStream: ['upload', 'downloadPermission', function (cb, r) {
-							return EncryptionService.decipherStream(r.upload.salt, r.downloadPermission.iv, scope.password, cb);
+							return EncryptionService.decipherStream(new Buffer(r.upload.salt, 'binary'), new Buffer(r.downloadPermission.iv, 'binary'), scope.password, cb);
 						}],
 						pipeline: ['downloadPermission', 'decipherStream', function (cb, r) {
 							var downloadStream = highland(request.get(r.downloadPermission.signedRequest));
 
 							var decompressionStream = CompressionService.gunzipStream({});
 
-							console.log(123, r, downloadStream, decompressionStream);
-
-							return downloadStream.through(r.decipherStream).through(decompressionStream).done(cb);
+							return downloadStream.through(r.decipherStream).through(decompressionStream).pipe(blobStream()).on('finish', function () {
+								scope.downloadedFile = this.toBlobURL();
+								scope.$apply();
+							});
 						}]
 					}, function (e, r) {
 						if (e)
