@@ -25,6 +25,12 @@ module.exports = function (app) {
 				max: 100 * 1024 * 1024, // 100 MiB
 				maxTotal: 100 * 1024 * 1024 // 100 MiB
 			}
+		},
+		encryption: {
+			pbkdf2: {
+				iterations: 1336,
+				digest: 'sha256'
+			}
 		}
 	};
 
@@ -35,12 +41,6 @@ module.exports = function (app) {
 		},
 		uploadForm: {
 			validation: backend.validation
-		},
-		encryption: {
-			pbkdf2: {
-				iterations: 1336,
-				digest: 'sha256'
-			}
 		}
 	});
 

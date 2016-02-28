@@ -1,0 +1,23 @@
+extends layout
+
+block meta
+	title About Cryptbucket
+
+block header
+	include header
+
+block main
+	.jumbotron.jumbotron-fluid.bg-white
+		.container
+			h2 Frequently asked questions
+
+			dl
+				dt Why don't you use SSL/TLS?
+				dd If we used TLS, due to the nature of it, our hosting provider (Heroku) had to know our private encryption key. This is against our No-trust-policy. Since any hosting provider (especially in the US) may be subject to forced disclosure by the government, this renders TLS encryption for third-party hosting providers useless. Our technology is built in a way that no plaintext data is transferred at all without having to trust a third party.
+
+				dt Which encryption/hashing algorithm do you use?
+				dd We use the following algorithms
+					ul
+						li Salt and initialization vector generation: #[a(href='https://nodejs.org/api/crypto.html#crypto_crypto_randombytes_size_callback', target='_blank', rel='nofollow') randomBytes function from Node.js crypto library]
+						li Encryption key derivation and challenge result: #[a(href='https://en.wikipedia.org/wiki/PBKDF2', target='_blank', rel='nofollow') PBKDF2] with #{config.encryption.pbkdf2.iterations} iterations of SHA-256
+						li Encryption: #[a(href='https://en.wikipedia.org/wiki/Advanced_Encryption_Standard', target='_blank', rel='nofollow') AES]-256-CTR

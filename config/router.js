@@ -6,6 +6,14 @@ module.exports = function (app, express) {
 		return res.render('homepage');
 	});
 
+	router.get('/how-it-works', function (req, res, next) {
+		return res.render('howItWorks');
+	});
+
+	router.get('/faq', function (req, res, next) {
+		return res.render('faq');
+	});
+
 	router.get('/about', function (req, res, next) {
 		return res.render('about');
 	});

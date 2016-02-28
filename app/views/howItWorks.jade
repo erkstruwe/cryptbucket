@@ -1,0 +1,46 @@
+extends layout
+
+block meta
+	title About Cryptbucket
+
+block header
+	include header
+
+block main
+	.jumbotron.jumbotron-fluid.bg-white
+		.container
+			h2 How it works
+
+			h3 Upload
+			ol
+				li User chooses file and password
+				li Cryptbucket checks for copyrighted or illegal content based on the file's MD5 hash and file size (file content is not used directly) and issues an upload permission
+				li File is compressed using Gzip
+				li Encryption key is derived from chosen password and random salt
+				li Compressed filed is encrypted using derived key and random initialization vector
+				li Encrypted file is uploaded to Amazon Web Services' Simple Storage Service (AWS S3)
+				li Random challenge is used to derive a challenge result with same salt used in encryption key derivation
+				li Salt, initialization vector, challenge, and challenge result are stored on Cryptbucket server
+				li User is presented a download URL
+
+			h3 Download
+			ol
+				li User visits download URL
+				li Browser gets salt and challenge from Cryptbucket server
+				li User enters password to calculate challenge result
+				li Cryptbucket checks if calculated challenge result matches stored challenge result and provides download permission and initialization vector
+				li Decryption key is derived from salt and entered password
+				li File is downloaded, decrypted and uncompressed in one step
+				li User saves the file
+
+			h3 Benefits
+			ul
+				li Cryptbucket is able to check if the download password matches the upload password without knowing the plaintext password
+				li User doesn't have to download the whole file in order to test the password
+				li Neither Cryptbucket nor Amazon nor anyone eavesdropping the connection may know the file's content without knowing the password
+				li Access without password is prevented even for encrypted data
+				li Compression saves bandwidth as well as disk space
+				li Download streaming uses as little memory as possible
+				li Copyright owners and law enforcement agencies may prevent illegal files from being uploaded without affecting the user's privacy
+				li No-trust-policy (meaning that we don't need to trust any third party involved)
+				li Easy to use
