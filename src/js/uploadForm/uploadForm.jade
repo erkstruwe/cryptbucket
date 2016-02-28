@@ -1,14 +1,20 @@
-form(name='uploadForm', ng-submit='process()', novalidate)
+form(name='form', ng-submit='process()', novalidate)
+	.form-group(ng-class='{"has-success": form.file.$dirty && form.file.$valid, "has-danger": form.file.$dirty && form.file.$invalid}')
+		div.form-control(name='file', ng-class='{"form-control-success": form.file.$dirty && form.file.$valid, "form-control-danger": form.file.$dirty && form.file.$invalid}', ngf-select='', ngf-drop='', ng-model='file', required, ngf-model-invalid="invalidFiles", ngf-multiple="false", ngf-keep="false", ngf-max-files='1', ngf-change='selectFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)', ngf-max-size='{{validation.size.max}}', ngf-max-total-size='{{validation.size.maxTotal}}', ngf-validate-async-fn='validate($files)')
+			p(ng-if='!files.length') Select or drop file here
+			p(ng-repeat='file in files', ng-bind='file.name + " (" + file.size + " bytes)"')
+		div(ng-if='form.file.$dirty')
+			p.text-help.text-muted(ng-if='form.file.$error.required') Please choose a file
+			p.text-help.text-muted(ng-if='form.file.$error.maxSize') Maximum size during beta: {{validation.size.max / 1024 | number: 0}} kB
+	.form-group(ng-class='{"has-success": form.password.$touched && form.password.$valid, "has-danger": form.password.$touched && form.password.$invalid}')
+		input.form-control(type='password', name='password', ng-class='{"form-control-success": form.password.$touched && form.password.$valid, "form-control-danger": form.password.$touched && form.password.$invalid}', ng-model='password', required, minLength='8', placeholder='Password')
+		div(ng-if='form.password.$touched')
+			p.text-help.text-muted(ng-if='form.password.$error.required') Please choose a password
+			p.text-help.text-muted(ng-if='form.password.$error.minlength') Minimum length: 8 characters
 	.form-group
-		div.form-control(ngf-select='', ngf-drop='', ng-model='file', required, ngf-model-invalid="invalidFiles", ngf-multiple="false", ngf-keep="false", ngf-max-files='1', ngf-change='selectFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)', ngf-max-size='{{validation.size.max}}', ngf-max-total-size='{{validation.size.maxTotal}}', ngf-validate-async-fn='validate($files)')
-			.card-title Select or drop file here
-			p.card-text(ng-repeat='file in files', ng-bind='file.name + " (" + file.size + " bytes)"')
-	.form-group
-		input.form-control(type='password', ng-model='password', required, minLength='8', placeholder='Password')
-	.form-group
-		button.btn.btn-success(type='submit', ng-disabled='!uploadForm.$valid') Encrypt and upload
+		button.btn.btn-lg.btn-success(type='submit', ng-disabled='!form.$valid || form.$submitted', ng-bind='!form.$valid ? ("Please choose " + (!form.file.$valid ? "a file" : "") + (!form.file.$valid && !form.password.$valid ? " and " : "") + (!form.password.$valid ? "a password" : "")) : (!form.$submitted ? "Encrypt and upload" : (!uploadedFile ? "Encrypting and uploading" : "Encryption and upload successful"))')
 
-	.form-group(ng-if='uploadForm.$submitted')
+	.form-group(ng-if='form.$submitted')
 		.row
 			span.col-xs-6.col-sm-4.col-md-3 Encryption #[br] ({{status.cipherStreamProgress.speed / 1024 | number: 0}} kB/s)
 			.col-xs-6.col-sm-8.col-md-9
@@ -26,4 +32,4 @@ form(name='uploadForm', ng-submit='process()', novalidate)
 		.input-group
 			input.form-control(type='text', ng-model='uploadedFile', readonly)
 			span.input-group-btn
-				button.btn.btn-success(type='button', clipboard, text='uploadedFile', ng-click='copyToClipboard(uploadedFile)'): i.fa.fa-clipboard
+				button.btn.btn-success(type='button', clipboard, text='uploadedFile', ng-click='copyToClipboard(uploadedFile)') #[i.fa.fa-clipboard.fa-fw] Copy to clipboard

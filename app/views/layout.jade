@@ -2,24 +2,27 @@ doctype html
 html(lang='en')
 	head
 		block meta
-			title Cryptbucket
+			title Cryptbucket &ndash; end-to-end encrypted, open-source file transfer service
+			meta(name='description', content='Transfer large files for free with our secure file hosting platform')
 
 		meta(charset='utf-8')
 		meta(name='viewport', content='width=device-width,initial-scale=1,shrink-to-fit=no')
 		meta(http-equiv='x-ua-compatible', content='ie=edge')
 		link(rel='stylesheet', href=config.baseUrlStatic + '/styles.css')
 
-	body
+	body(ng-app='cryptbucket', ng-strict-di)
 		nav.navbar
-			a(href=config.baseUrl).navbar-brand Cryptbucket
-			ul.nav.navbar-nav
-				li.nav-item
-					a.nav-link(href='/imprint') Imprint
+			button.navbar-toggler.hidden-sm-up(type='button', data-toggle='collapse', data-target='#navbarCollapse') &#9776;
+			div#navbarCollapse.collapse.navbar-toggleable-xs
+				a(href=config.baseUrl).navbar-brand Cryptbucket
+				ul.nav.navbar-nav
+					li.nav-item
+						a.nav-link(href='/about') About
 
 		header
 			block header
 
-		main(ng-app='cryptbucket', ng-strict-di)
+		main
 			block main
 
 		footer

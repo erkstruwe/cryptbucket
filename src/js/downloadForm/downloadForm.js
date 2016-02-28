@@ -85,8 +85,14 @@ angular
 								});
 						}]
 					}, function (e, r) {
-						if (e)
+						if (e) {
+							if (e.status == 404) {
+								scope.form.password.$setValidity('correct', false);
+								scope.form.$setPristine();
+								return console.log('Wrong password');
+							}
 							return console.error(e);
+						}
 
 						return console.log(r);
 					});

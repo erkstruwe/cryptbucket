@@ -6,8 +6,8 @@ module.exports = function (app, express) {
 		return res.render('homepage');
 	});
 
-	router.get('/imprint', function (req, res, next) {
-		return res.render('imprint');
+	router.get('/about', function (req, res, next) {
+		return res.render('about');
 	});
 
 	router.get('/download/:uploadId', function (req, res, next) {

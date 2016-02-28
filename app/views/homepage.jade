@@ -14,13 +14,25 @@ block main
 	.jumbotron.jumbotron-fluid
 		.container(id='learn')
 			.row
-				each feature, index in [{title: 'End-to-end encryption', subtitle: 'Protect your data from hackers, intelligence, and even from ourselves', icon: 'lock', color: 'danger', text: 'You and the persons you share the password with are the only ones able to recover your decrypted data, even though it is physically stored at our partner Amazon\'s data centers. That\'s because your files are encrypted in your browser <em>before</em> being sent. Your password is never sent anywhere.'}, {title: 'Open source code', subtitle: 'Review our code and decide to trust our technology', icon: 'file-code-o', color: 'success', text: 'The full source code is publicly available at our <a href="https://github.com/erkstruwe/cryptbucket" target="_blank">Github</a> repository. Feel free to clone it and see for yourself that we keep our security promises.'}]
+				-
+					var features = [
+					{title: 'Free', subtitle: 'Use our service free of charge', icon: 'money', color: 'success', text: 'Seriously, it\'s free. No strings attached.'},
+					{title: 'End-to-end encryption', subtitle: 'Protect your data from hackers, intelligence, and even from ourselves', icon: 'lock', color: 'danger', text: 'You and the persons you share the password with are the only ones able to recover your decrypted data, even though it is physically stored at our partner Amazon\'s data centers. That\'s because your files are encrypted in your browser <em>before</em> being sent. Your password is never sent anywhere.'},
+					{title: 'Auto-delete', subtitle: 'Your files get deleted automatically after one week', icon: 'trash-o', color: 'info', text: 'This feature will be implemented in the near future.'},
+					{title: 'Open source code', subtitle: 'Review our code and decide to trust our technology', icon: 'file-code-o', color: 'primary', text: 'Cryptbucket\'s full source code is publicly available at our <a href="https://github.com/erkstruwe/cryptbucket" target="_blank">Github</a> repository. Feel free to clone it and see for yourself that we keep our security promises.'},
+					{title: 'No ads, no tracking', subtitle: 'We don\'t display ads or sell usage data to ad networks', icon: 'database', color: 'success', text: 'In fact, we don\'t gather any usage statistics. When was the last time you visited a website that doesn\'t even use a single cookie?'},
+					{title: 'No illegal content', subtitle: 'We actively prevent copyrighted or illegal content from being uploaded', icon: 'gavel', color: 'danger', text: 'This feature will be implemented in the near future. Until then, the file size is limited to 100 kB.'}
+					]
+				each feature, index in features
 					.col-xs-12.col-md-6.col-lg-4
 						p.h4= feature.title
 						p.h6.text-muted= feature.subtitle
-						p.text-xs-center
-							span.fa.fa-4x(class='fa-' + feature.icon + ' text-' + feature.color)
+						p.text-xs-center: span.fa.fa-5x(class='fa-' + feature.icon + ' text-' + feature.color)
 						p.text-justify !{feature.text}
+					if (index % 2 == 1)
+						.clearfix.hidden-lg-up
+					if (index % 3 == 2)
+						.clearfix.hidden-md-down
 
 	// context of use
 	// trust elements
