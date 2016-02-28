@@ -2,7 +2,7 @@ form(name='form', ng-submit='process()', novalidate)
 	.form-group(ng-class='{"has-success": form.file.$dirty && form.file.$valid, "has-danger": form.file.$dirty && form.file.$invalid}')
 		div.form-control(name='file', ng-class='{"form-control-success": form.file.$dirty && form.file.$valid, "form-control-danger": form.file.$dirty && form.file.$invalid}', ngf-select='', ngf-drop='', ng-model='file', required, ngf-model-invalid="invalidFiles", ngf-multiple="false", ngf-keep="false", ngf-max-files='1', ngf-change='selectFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)', ngf-max-size='{{validation.size.max}}', ngf-max-total-size='{{validation.size.maxTotal}}', ngf-validate-async-fn='validate($files)')
 			p(ng-if='!files.length') Select or drop file here
-			p(ng-repeat='file in files', ng-bind='file.name + " (" + file.size + " bytes)"')
+			p(ng-repeat='file in files', ng-bind='file.name + " (" + (file.size / 1024 | number: 1) + " kB)"')
 		div(ng-if='form.file.$dirty')
 			p.text-help.text-muted(ng-if='form.file.$error.required') Please choose a file
 			p.text-help.text-muted(ng-if='form.file.$error.maxSize') Maximum size during beta: {{validation.size.max / 1024 | number: 0}} kB
