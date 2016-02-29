@@ -10,6 +10,44 @@ npm install
 ### Set up environment
 Copy `.env.sample` to `.env` and make all necessary changes to get your database and AWS S3 connections working.
 
+Please take a look at `config/env/development.js` to see if all settings match your environment. By default, you should have a DNS entry with `static.localhost` mapping to `127.0.0.1`.
+
+The Amazon credentials supplied in `.env` should be allowed to `putObject` and `getObject` to AWS S3 in your [S3 Bucket Policy](http://awspolicygen.s3.amazonaws.com/policygen.html).
+```json
+{
+  "Id": "YOUR_POLICY_ID",
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Sid": "YOUR_STATEMENT_ID",
+    "Action": [
+      "s3:GetObject",
+      "s3:PutObject"
+    ],
+    "Effect": "Allow",
+    "Resource": "arn:aws:s3:::YOUR_BUCKET_NAME/*",
+    "Principal": {
+      "AWS": [
+        "YOUR_IAM_ARN"
+      ]
+    }
+  }]
+}
+```
+
+Your bucket's CORS configuration should at least include the following.
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<CORSConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+  <CORSRule>
+    <AllowedOrigin>http://localhost:1336</AllowedOrigin>
+    <AllowedMethod>GET</AllowedMethod>
+    <AllowedMethod>PUT</AllowedMethod>
+    <AllowedHeader>accept</AllowedHeader>
+    <AllowedHeader>content-type</AllowedHeader>
+  </CORSRule>
+</CORSConfiguration>
+```
+
 ### Test
 ```
 npm test
