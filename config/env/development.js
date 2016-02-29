@@ -34,7 +34,7 @@ module.exports = function (app) {
 		}
 	};
 
-	var frontend = app.locals.lib.lodash.pick(backend, 'baseUrl baseUrlStatic'.split(' '));
+	var frontend = app.locals.lib.lodash.pick(backend, 'baseUrl baseUrlStatic encryption'.split(' '));
 	app.locals.lib.lodash.merge(frontend, {
 		fileStream: {
 			chunkSize: 16 * 1024 // 16 kib
