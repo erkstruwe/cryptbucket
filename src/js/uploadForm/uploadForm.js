@@ -80,7 +80,8 @@ angular
 										.map(function (file) {
 											return {
 												size: file.size,
-												type: file.type || null
+												extension: file.name.indexOf('.') > -1 ? lodash.last(file.name.split('.')) : '',
+												mimetype: file.type || null
 											};
 										})
 										.value()

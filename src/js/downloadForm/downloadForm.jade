@@ -23,5 +23,5 @@ form(name='form', ng-submit='process()', novalidate)
 				progress.progress.progress-success(ng-bind='(status.downloadStreamProgress.percentage | number: 0) + " %"', ng-value='status.downloadStreamProgress.percentage / 100', max='1')
 
 	.form-group(ng-if='downloadedFile')
-		a.btn.btn-success(ng-href='{{downloadedFile}}', download='cryptbucket.file') #[i.fa.fa-save.fa-fw] Save file
+		a.btn.btn-success(ng-href='{{downloadedFile.url}}', download='{{downloadedFile.name}}') #[i.fa.fa-save.fa-fw] Save file
 

@@ -79,7 +79,10 @@ angular
 								.through(decompressionStream)
 								.pipe(blobStream())
 								.on('finish', function () {
-									scope.downloadedFile = this.toBlobURL();
+									scope.downloadedFile = {
+										url: this.toBlobURL(),
+										name: lodash.trimEnd('cryptbucket.' + lodash.get(r.downloadPermission, 'files.0.extension', ''), '.')
+									};
 									scope.status.downloadStreamProgress.percentage = 100;
 									scope.$apply();
 								});

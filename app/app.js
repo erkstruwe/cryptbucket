@@ -38,7 +38,8 @@ module.exports = function (cb) {
 		credentials: {
 			accessKeyId: app.locals.config.s3.accessKeyId,
 			secretAccessKey: app.locals.config.s3.secretAccessKey
-		}
+		},
+		signatureVersion: 'v4'
 	});
 
 	// connect to database

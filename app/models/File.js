@@ -18,7 +18,11 @@ module.exports = function (app) {
 				type: sequelize.STRING(16),
 				allowNull: true
 			},
-			type: {
+			extension: {
+				type: sequelize.STRING(8),
+				allowNull: false
+			},
+			mimetype: {
 				type: sequelize.STRING(16),
 				validate: {
 					notEmpty: true
@@ -28,7 +32,11 @@ module.exports = function (app) {
 		{
 			paranoid: true,
 			indexes: [],
-			instanceMethods: {},
+			instanceMethods: {
+				toJSON: function () {
+					return app.locals.lib.lodash.pick(this.get(), ['extension', 'mimetype']);
+				}
+			},
 			classMethods: {}
 		}
 	);

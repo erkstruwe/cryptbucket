@@ -52,7 +52,7 @@ module.exports = {
 
 		return req.app.locals.lib.async.auto({
 			upload: function (cb) {
-				return req.app.locals.models.Upload.find({where: opts}).nodeify(cb);
+				return req.app.locals.models.Upload.find({where: opts, include: [req.app.locals.models.File]}).nodeify(cb);
 			},
 			signedRequest: ['upload', function (cb, r) {
 				if (!r.upload)
@@ -61,8 +61,7 @@ module.exports = {
 				var params = {
 					Bucket: r.upload.bucket,
 					Key: r.upload.folder + '/' + r.upload.filename,
-					Expires: 86400, // 1d
-					//ContentType: 'application/json;charset=utf-8'
+					Expires: 86400
 				};
 
 				return req.app.locals.lib.s3.getSignedUrl('getObject', params, cb);
@@ -76,6 +75,7 @@ module.exports = {
 
 			return res.send({
 				signedRequest: r.signedRequest,
+				files: r.upload.files,
 				iv: r.upload.iv
 			});
 		});
