@@ -2,8 +2,8 @@ module.exports = function (app) {
 	var backend = {
 		environment: app.get('env'),
 		port: process.env.PORT,
-		baseUrl: '//localhost:1336',
-		baseUrlStatic: '//static.localhost:1336',
+		baseUrl: 'http://localhost:1336',
+		baseUrlStatic: 'http://static.localhost:1336',
 		db: {
 			url: process.env.CLEARDB_DATABASE_URL,
 			host: process.env.DB_HOST,

@@ -19,8 +19,8 @@ angular
 	.config(['CONFIG', '$sceDelegateProvider', function (CONFIG, $sceDelegateProvider) {
 		$sceDelegateProvider.resourceUrlWhitelist([
 			'self',
-			'http:' + CONFIG.baseUrlStatic + '/**',
-			'https:' + CONFIG.baseUrlStatic + '/**'
+			CONFIG.baseUrlStatic + '/**',
+			CONFIG.baseUrlStatic + '/**'
 		]);
 	}])
 	.run(function () {

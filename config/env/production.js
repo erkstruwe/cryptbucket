@@ -2,8 +2,8 @@ module.exports = function (app) {
 	var backend = {
 		environment: app.get('env'),
 		port: process.env.PORT,
-		baseUrl: '//cryptbucket.com',
-		baseUrlStatic: '//cryptbucket.com/static',
+		baseUrl: 'http://cryptbucket.com',
+		baseUrlStatic: 'http://cryptbucket.com/static',
 		db: {
 			url: process.env.CLEARDB_DATABASE_URL,
 			host: process.env.DB_HOST,
