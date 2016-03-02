@@ -20,7 +20,7 @@
   "scripts": {
     "test": "npm-run-all --parallel lint test:app test:js",
     "test:app": "jasmine JASMINE_CONFIG_PATH=tests/jasmine.json",
-    "test:js": "karma start tests/karma.conf",
+    "test:js": "npm run build:js && karma start tests/karma.conf",
     "start": "npm run clean && npm run build && node app/app.js",
     "clean": "rimraf .tmp/*",
     "lint": "npm run lint:js",
