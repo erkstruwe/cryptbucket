@@ -48,6 +48,8 @@ Your bucket's CORS configuration should at least include the following.
 </CORSConfiguration>
 ```
 
+Enable the auto-delete feature by changing the lifecycle settings of your S3 bucket to permanently delete all files with prefix ```standard``` 7 days after creation. Make sure to set the amount of days in the config file as well.
+
 ### Test
 ```
 npm test

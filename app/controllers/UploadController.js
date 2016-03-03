@@ -55,9 +55,6 @@ module.exports = {
 				return req.app.locals.models.Upload.find({where: opts, include: [req.app.locals.models.File]}).nodeify(cb);
 			},
 			signedRequest: ['upload', function (cb, r) {
-				if (!r.upload)
-					return cb();
-
 				var params = {
 					Bucket: r.upload.bucket,
 					Key: r.upload.folder + '/' + r.upload.filename,
@@ -72,6 +69,9 @@ module.exports = {
 
 			if (!r.upload)
 				return res.sendStatus(404);
+
+			if (req.app.locals.config.autoDelete.period && (new Date() - r.upload.createdAt) / 1000 > req.app.locals.config.autoDelete.period)
+				return res.sendStatus(410);
 
 			return res.send({
 				signedRequest: r.signedRequest,

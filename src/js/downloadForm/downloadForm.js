@@ -23,6 +23,7 @@ angular
 			link: function (scope, element, attrs) {
 				scope.password = '';
 				scope.downloadedFile = null;
+				scope.autoDeleteDays = CONFIG.autoDelete.period / 60 / 60 / 24;
 				scope.status = {
 					downloadStreamProgress: {
 						percentage: 0,
@@ -93,6 +94,10 @@ angular
 								scope.form.password.$setValidity('correct', false);
 								scope.form.$setPristine();
 								return console.log('Wrong password');
+							} else if (e.status == 410) {
+								scope.form.password.$setValidity('undeleted', false);
+								scope.form.$setPristine();
+								return console.log('File auto-deleted');
 							}
 							return console.error(e);
 						}

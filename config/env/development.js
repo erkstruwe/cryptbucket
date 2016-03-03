@@ -31,6 +31,9 @@ module.exports = function (app) {
 				iterations: 1336,
 				digest: 'sha256'
 			}
+		},
+		autoDelete: {
+			period: 60 * 60 * 24 * 7 // period in seconds or false
 		}
 	};
 
@@ -41,7 +44,7 @@ module.exports = function (app) {
 		backend.assets = {};
 	}
 
-	var frontend = app.locals.lib.lodash.pick(backend, 'baseUrl baseUrlStatic encryption assets'.split(' '));
+	var frontend = app.locals.lib.lodash.pick(backend, 'baseUrl baseUrlStatic encryption autoDelete assets'.split(' '));
 	app.locals.lib.lodash.merge(frontend, {
 		fileStream: {
 			chunkSize: 16 * 1024 // 16 kib

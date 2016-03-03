@@ -5,6 +5,7 @@ form(name='form', ng-submit='process()', novalidate)
 			p.text-help.text-muted(ng-if='form.password.$error.required') Please choose a password
 			p.text-help.text-muted(ng-if='form.password.$error.minlength') Minimum length: 8 characters
 			p.text-help.text-muted(ng-if='form.password.$error.correct') The password you entered is not correct
+			p.text-help.text-muted(ng-if='form.password.$error.undeleted') The file was auto-deleted {{autoDeleteDays | number: 0}} days after upload
 	.form-group
 		button.btn.btn-success(type='submit', ng-disabled='!form.$valid || form.$submitted', ng-bind='!form.$valid ? "Please enter the password" : (!form.$submitted ? "Download end decrypt" : (!downloadedFile ? "Downloading and decrypting" : "Download and decryption successful"))')
 
