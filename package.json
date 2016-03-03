@@ -59,7 +59,7 @@
     "highland": "~2.6.0",
     "jade": "~1.11.0",
     "jquery": "~2.2.0",
-    "jsonfile": "^2.2.3",
+    "jsonfile": "~2.2.3",
     "lodash": "~4.5.0",
     "mysql": "~2.10.2",
     "ng-file-upload": "~12.0.1",
