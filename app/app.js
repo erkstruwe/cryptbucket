@@ -7,6 +7,8 @@ module.exports = function (cb) {
 	lib.path = require('path');
 	lib.dotenv = require('dotenv');
 	lib.lodash = require('lodash');
+	lib.jsonfile = require('jsonfile');
+	lib.logger = require('winston');
 	lib.dotenv.load();
 	var configObject = require('../config/env/' + app.get('env') + '.js')(app);
 	app.locals.config = configObject.backend;
@@ -32,7 +34,6 @@ module.exports = function (cb) {
 	lib.st = require('st');
 	lib.async = require('async');
 	lib.sequelize = require('sequelize');
-	lib.logger = require('winston');
 	var aws = require('aws-sdk');
 	lib.s3 = new aws.S3({
 		credentials: {

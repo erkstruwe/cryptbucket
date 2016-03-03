@@ -34,7 +34,14 @@ module.exports = function (app) {
 		}
 	};
 
-	var frontend = app.locals.lib.lodash.pick(backend, 'baseUrl baseUrlStatic encryption'.split(' '));
+	try {
+		backend.assets = app.locals.lib.jsonfile.readFileSync('.tmp/assets.json');
+	} catch (e) {
+		app.locals.lib.logger.warn('Could not load assets.json');
+		backend.assets = {};
+	}
+
+	var frontend = app.locals.lib.lodash.pick(backend, 'baseUrl baseUrlStatic encryption assets'.split(' '));
 	app.locals.lib.lodash.merge(frontend, {
 		fileStream: {
 			chunkSize: 16 * 1024 // 16 kiB

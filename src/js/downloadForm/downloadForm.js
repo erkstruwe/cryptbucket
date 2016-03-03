@@ -16,7 +16,7 @@ angular
 	.module('downloadForm', ['config', 'async', 'lodash', 'compression', 'encryption'])
 	.directive('downloadForm', ['CONFIG', 'async', 'lodash', 'CompressionService', 'EncryptionService', '$http', function (CONFIG, async, lodash, CompressionService, EncryptionService, $http) {
 		return {
-			templateUrl: CONFIG.baseUrlStatic + '/downloadForm.html',
+			templateUrl: CONFIG.baseUrlStatic + '/' + (CONFIG.assets['downloadForm.html'] || 'downloadForm.html'),
 			scope: {
 				uploadId: '@uploadId'
 			},

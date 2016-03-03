@@ -17,7 +17,7 @@ angular
 	.module('uploadForm', ['ngFileUpload', 'angular-clipboard', 'config', 'async', 'lodash', 'fileStream', 'compression', 'encryption'])
 	.directive('uploadForm', ['Upload', 'CONFIG', 'async', 'lodash', 'FileStreamService', 'CompressionService', 'EncryptionService', '$http', function (Upload, CONFIG, async, lodash, FileStreamService, CompressionService, EncryptionService, $http) {
 		return {
-			templateUrl: CONFIG.baseUrlStatic + '/uploadForm.html',
+			templateUrl: CONFIG.baseUrlStatic + '/' + (CONFIG.assets['uploadForm.html'] || 'uploadForm.html'),
 			scope: {},
 			link: function (scope, element, attrs) {
 				scope.file = [];

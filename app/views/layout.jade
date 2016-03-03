@@ -8,7 +8,7 @@ html(lang='en')
 		meta(charset='utf-8')
 		meta(name='viewport', content='width=device-width,initial-scale=1,shrink-to-fit=no')
 		meta(http-equiv='x-ua-compatible', content='ie=edge')
-		link(rel='stylesheet', href=config.baseUrlStatic + '/styles.css')
+		link(rel='stylesheet', href=config.baseUrlStatic + '/' + (config.assets['styles.css'] || 'styles.css'))
 
 	body(ng-app='cryptbucket', ng-strict-di)
 		nav.navbar
@@ -37,7 +37,7 @@ html(lang='en')
 			.jumbotron.jumbotron-fluid
 				p.text-xs-center &copy; 2016
 
-		script(src=config.baseUrlStatic + '/app.js')
+		script(src=config.baseUrlStatic + '/' + (config.assets['app.js'] || 'app.js'))
 		script angular.module('config', []).constant('CONFIG', JSON.parse('!{JSON.stringify(configFrontend)}'));
 		if (config.environment == 'development')
 			script document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1" async></' + 'script>');
