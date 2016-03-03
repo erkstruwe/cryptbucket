@@ -125,7 +125,7 @@ module.exports = function (cb) {
 		gzip: false, // compression is already used
 		cache: {
 			content: {
-				maxAge: 1000 * 60 * 60 * 24 * 180 // 180 days
+				maxAge: 1000 * 60 * 60 * 24 * 365 // 365 days
 			}
 		},
 		cors: true
