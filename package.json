@@ -11,7 +11,7 @@
   },
   "homepage": "http://cryptbucket.com/",
   "engines": {
-    "node": "5.7.0"
+    "node": "5.7.1"
   },
   "repository": {
     "type": "git",
