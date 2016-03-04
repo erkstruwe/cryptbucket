@@ -3,21 +3,21 @@ module.exports = function (cb) {
 	var app = express();
 	var lib = app.locals.lib = {};
 
-	// config
+	// node modules
+	lib.fs = require('fs');
 	lib.path = require('path');
-	lib.dotenv = require('dotenv');
+	lib.url = require('url');
+	lib.util = require('util');
+
+	// config
 	lib.lodash = require('lodash');
 	lib.jsonfile = require('jsonfile');
 	lib.logger = require('winston');
+	lib.dotenv = require('dotenv');
 	lib.dotenv.load();
 	var configObject = require('../config/env/' + app.get('env') + '.js')(app);
 	app.locals.config = configObject.backend;
 	app.locals.configFrontend = configObject.frontend;
-
-	// node modules
-	lib.fs = require('fs');
-	lib.url = require('url');
-	lib.util = require('util');
 
 	// app setup
 	app.set('case sensitive routing', true);
@@ -33,6 +33,7 @@ module.exports = function (cb) {
 	lib.helmet = require('helmet');
 	lib.st = require('st');
 	lib.async = require('async');
+	lib.slash = require('express-slash');
 	lib.sequelize = require('sequelize');
 	var aws = require('aws-sdk');
 	lib.s3 = new aws.S3({
@@ -84,7 +85,7 @@ module.exports = function (cb) {
 			app.locals.models[file.replace(/\.js$/i, '')] = require(__dirname + '/models/' + file)(app);
 		})
 		.value();
-	require(__dirname + '/models/relations.js')(app);
+	require('./models/relations.js')(app);
 
 	// controllers
 	app.locals.controllers = {};
@@ -163,6 +164,7 @@ module.exports = function (cb) {
 
 	// routing
 	app.use(require('../config/router.js')(app, express));
+	app.use(lib.slash());
 
 	// catch 404 and forward to error handler
 	app.use(function (req, res, next) {
@@ -176,7 +178,7 @@ module.exports = function (cb) {
 		syncDb: function (cb) {
 			if (app.locals.config.db.sync)
 				return app.locals.db.sync({
-					force: app.locals.config.db.forceSync, // Attention! When true, this will drop all tables!
+					force: app.locals.config.db.forceSync,
 					logging: function (msg) {
 						return lib.logger.log(app.locals.config.db.logLevel, msg);
 					}
@@ -191,11 +193,11 @@ module.exports = function (cb) {
 		}]
 	}, function (e) {
 		if (e) {
-			console.error(e);
+			lib.logger.error(e);
 			return cb(e);
 		}
 
-		console.log('Listening on port', app.locals.config.port);
+		lib.logger.info('Listening on port', app.locals.config.port);
 		return cb(null, app);
 	});
 
